@@ -10,7 +10,7 @@
 ```
 skills/                    # 技能:工作流逻辑
 ├── dev/                   # 主入口:分类器 + 轻流程 + 重流程 + 回退协议
-│   └── references/        #   设计文档模板、计划文档模板
+│   └── references/        #   设计模板(design)、规格模板(spec)、自查清单、计划模板
 ├── dev-doc/               # 知识沉淀(CONTEXT.md + ADR)
 ├── dev-resume/            # 中断恢复协议
 ├── dev-review/            # 代码库巡检
@@ -18,7 +18,7 @@ skills/                    # 技能:工作流逻辑
 ├── domain-docs/           # 纪律:词汇表 + ADR 维护
 ├── tdd/                   # 纪律:红绿循环 + 豁免白名单
 ├── code-review/           # 纪律:子代理评审 + 分级处置
-│   └── references/        #   评审子代理派发模板
+│   └── references/        #   评审派发模板 + 复审专用模板
 ├── debugging/             # 纪律:根因先行诊断
 └── verification/          # 纪律:证据先于声称
 
@@ -57,15 +57,15 @@ cp -r prompts/* .pi/prompts/
 ### 日常开发
 
 ```
-/dev 给项目加团队邀请功能        ← 重流程:访谈→设计文档(门1)→计划(门2)→逐任务开发→最终确认(门3)
+/dev 给项目加团队邀请功能        ← 重流程:访谈→设计+规格骨架(门1)→用例详版+计划(门2)→逐任务开发→最终确认(门3)
 /dev 修复导出时的报错           ← 轻流程:直接修(根因先行),汇报后提交
 /dev-resume                     ← 中断后续命
 ```
 
 ### 重流程中你只需要在三个点出现
 
-1. **门 1**:访谈结束后确认设计文档(`docs/plans/<日期>-<特性>/design.md`)
-2. **门 2**:确认开发计划(plan.md,含任务拆分)
+1. **门 1**:访谈结束后确认两份文档——design.md(决策快照)+ spec.md 骨架(接口规格四件套+钉住用例+接口面穷举清单)
+2. **门 2**:确认 spec.md 用例详版与开发计划(plan.md,任务=接口组)
 3. **门 3**:验收最终报告
 
 门之间的开发阶段 agent 自治:逐任务 TDD → 子代理评审 → 提交 → 勾选进度;只有 Critical 问题才会暂停问你。
@@ -85,10 +85,12 @@ cp -r prompts/* .pi/prompts/
 | 执行引擎 | 会话内执行 + 子代理评审 | 中小特性为主,流水线隔离收益不抵开销;评审独立性必须保住 |
 | TDD | 默认制 + 豁免白名单留痕 | 亲眼看红是核心;纯配置/文案豁免防磨人 |
 | 门密度 | 轻流程零门;重流程三门 | 人在决策处出现,在执行处消失 |
+| 设计产物 | design.md 决策快照(冻结)+ spec.md 实现规格(演进,带变更记录) | 决策不再被开发漂移污染;接口真值有台账可溯;已知缺陷类在设计期被自查清单拦截(v2,源自 threejs-labs 实证回顾) |
 | 回退 | 文档阶段零成本;开发阶段按 commit 精确切除 | 每任务一提交使爆炸半径可计算 |
 
 ## 维护说明
 
 - 修改技能后无需重启 pi 以外的操作;技能在会话启动时重新扫描。
-- `dev/SKILL.md` 与 `references/` 模板、`code-review/references/reviewer-prompt.md` 是流程契约,改动需同步更新 `../analysis/03-distilled-workflow-design.md`。
+- `dev/SKILL.md` 与 `references/` 模板、`code-review/references/`(评审派发 + 复审模板)是流程契约,改动需同步更新 `../analysis/03-distilled-workflow-design.md`。
+- 评审子代理:直接用 pi-subagents 内置 `reviewer`,不做本地副本或覆盖,保持上游同步;复审降思考档在派发时指定(model 后缀),不用本地 agent 覆盖。
 - 留档未实现(升级路径):子代理流水线执行器(大型任务)、triage、wayfinder、并行排查、per-repo setup。
