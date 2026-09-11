@@ -16,6 +16,7 @@ v2 流程强化已完成:设计产物拆分(design.md 决策快照 + spec.md 实
   - `code-review`:评审简报与派发模板加入 spec.md 接口组粘贴节
   - `dev-resume/SKILL.md`:恢复读取清单加入 spec.md(含变更记录)
   - `README.md` 与 `../analysis/03-distilled-workflow-design.md` 同步(修订 v2 注记)
+- 2026-09-09 pi 包化:仓库根新增 package.json(pi 清单指向 devflow/skills 与 devflow/prompts,keyword pi-package);新增根 README.md;devflow/README 安装节改为 pi install git:github.com/GuangAD/devflow 为首选,install.sh 标注废弃;安装形态从「复制目录」升级为「git 地址安装+ref 锚定」
 
 ## 进行中
 

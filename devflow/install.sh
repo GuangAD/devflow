@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-# devflow 安装脚本:复制技能与命令模板到 pi 全局目录
+# devflow 安装脚本(已废弃):推荐 pi install git:github.com/GuangAD/devflow
+# 本脚本仅为兼容保留;经 pi 包管理安装可获得版本锚定与更新跟进。
 set -euo pipefail
+echo "[警告] install.sh 已废弃,推荐: pi install git:github.com/GuangAD/devflow" >&2
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PI_SKILLS="${HOME}/.pi/agent/skills"

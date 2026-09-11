@@ -31,25 +31,23 @@ prompts/                   # 命令:固定入口
 
 ## 安装
 
-把 `skills/` 下的目录复制(或软链)到 pi 的技能目录,`prompts/` 下的文件复制到 pi 的提示词模板目录:
+**首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-# 全局安装(所有项目可用)
-cp -r skills/* ~/.pi/agent/skills/
-cp -r prompts/* ~/.pi/agent/prompts/
-
-# 或项目级安装(在目标仓库根目录)
-mkdir -p .pi/skills .pi/prompts
-cp -r skills/* .pi/skills/
-cp -r prompts/* .pi/prompts/
+pi install git:github.com/GuangAD/devflow@v2.0.0   # 全局,锚定 ref
+pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
+pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
 
-也可以在 pi 设置中直接指向本目录(settings.json):
+升级:仓库打新 tag 后 `pi install git:github.com/GuangAD/devflow@<新ref>`;未锚定 ref 的安装可被 `pi update --extensions` 跟进。
+
+**备选:settings.json 直接指向本目录**(本地开发本包时用,不经安装):
 
 ```json
 { "skills": ["D:/test/pi-workflow/devflow/skills"], "prompts": ["D:/test/pi-workflow/devflow/prompts"] }
 ```
 
+手动复制 skills/prompts 到 `~/.pi/agent/` 的老方法已由 install.sh 承担,该脚本已废弃,保留仅为兼容。
 重启 pi 后,输入 `/` 应能看到 `dev`、`dev-doc`、`dev-resume`、`dev-review` 四个命令。
 
 ## 使用
