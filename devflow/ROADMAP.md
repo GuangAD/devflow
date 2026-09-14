@@ -17,6 +17,8 @@ v2 流程强化已完成:设计产物拆分(design.md 决策快照 + spec.md 实
   - `dev-resume/SKILL.md`:恢复读取清单加入 spec.md(含变更记录)
   - `README.md` 与 `../analysis/03-distilled-workflow-design.md` 同步(修订 v2 注记)
 - 2026-09-09 pi 包化:仓库根新增 package.json(pi 清单指向 devflow/skills 与 devflow/prompts,keyword pi-package);新增根 README.md;devflow/README 安装节改为 pi install git:github.com/GuangAD/devflow 为首选,install.sh 标注废弃;安装形态从「复制目录」升级为「git 地址安装+ref 锚定」
+- 2026-09-14 01:34 design-template 方案概述节新增「模块划分鸟瞰」要求(A 单独可读:3-5 行模块组成与职责边界,签名仍归 spec);同步 analysis/03 门 1 清单;pi-w 首个验证项目的 design.md 已按新要求补写
+- 2026-09-14 01:40 spec-template 接缝接口规格改为按模块分节(### 模块路径同 design 鸟瞰/#### 条目),穷举清单按模块排序,编码方向明确按包分组——A 鸟瞰、B 模块节、plan 接口组三者词汇对齐
 
 ## 进行中
 
