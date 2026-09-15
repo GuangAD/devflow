@@ -22,7 +22,7 @@ pi -e git:github.com/GuangAD/devflow
 ## 提供的资源
 
 - **命令**:dev(主入口)/ dev-doc(知识沉淀)/ dev-resume(断点续做)/ dev-review(代码库巡检)
-- **纪律技能**:grilling(访谈)、tdd(红绿循环+豁免留痕)、code-review(子代理评审+分级处置)、debugging(根因先行)、verification(证据先于声称)、domain-docs(词汇表+ADR)等 10 项
+- **纪律技能**:grilling(访谈)、tdd(红绿循环+豁免留痕+反向验证)、code-review(子代理评审+分级处置)、debugging(根因先行)、verification(证据先于声称)、domain-docs(词汇表+ADR)等 10 项
 
 ## 文档
 
