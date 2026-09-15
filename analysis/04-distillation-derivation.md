@@ -7,7 +7,7 @@
 
 所有部件可归为三层:**skills 项目**(操作剧本)、**superpowers 项目**(行为纪律与机制)、**新造**(为个人场景设计,两边都没有)。蒸馏不是拼盘——每个借来的部件都经过"改写以适配轻形态"处理。
 
-## 二、从 skills 项目蒸馏(7 项)
+## 二、从 skills 项目蒸馏(8 项)
 
 | devflow 部件 | 来源技能 | 保留 | 改写 | 舍弃 |
 |---|---|---|---|---|
@@ -18,6 +18,9 @@
 | `debugging` | `diagnosing-bugs` | 回路先行、复现率优先、可证伪假设、回归测试先于修复、"无接缝是发现"、三次失败=架构、DBG- 前缀、根因进 commit | 六阶段→四步;10 种回路手段→3 类 | HITL 人肉回路脚本 |
 | `dev-review` | `improve-codebase-architecture` | 热点定范围、摩擦信号、删除测试、调查不抢救、强度徽章、ADR 冲突标注 | HTML 报告→Markdown;选中后路由进 /dev | Tailwind/Mermaid 可视化 |
 | 分类器 | `ask-matt` | 路由思想 | 全地图路由→信号清单+问一句 | 独立路由技能形态 |
+| `dev-map` 决策地图 | `wayfinder` | 目的地定范围、票四型(调研/原型/访谈/任务)、雾与票的判据、越界不毕业、每会话一票、产决策不产代码 | tracker issue → `docs/maps/<日期>-<slug>/map.md` 单文件;assignee 认领 → git 降级(每会话一票+解完即提交);出口接回 /dev 门 1 取代 to-spec | 原生阻塞依赖的可视化、research 票的分支留档 |
+
+> `wayfinder` 原列第五节舍弃清单 ①「场景不符」,2026-09-15 补采:大型且模糊的需求在个人场景确实存在,而 dev 门 1 的「开放问题非空不得呈报」对它是结构性卡死。
 
 ## 三、从 superpowers 项目蒸馏(8 项)
 
@@ -44,7 +47,7 @@
 
 ## 五、舍弃清单(按理由分组)
 
-**① 场景不符(个人使用无此工况)**:`triage`(含 .out-of-scope 知识库、agent brief)、`wayfinder`、`dispatching-parallel-agents`、多上下文 CONTEXT-MAP。
+**① 场景不符(个人使用无此工况)**:`triage`(含 .out-of-scope 知识库、agent brief)、`dispatching-parallel-agents`、多上下文 CONTEXT-MAP。(`wayfinder` 不在此列:2026-09-15 已补采,见第二节)
 
 **② 形态决策的直接代价**:
 - 命令启动 → 宪法注入、session hook、压缩重注入(superpowers bootstrap 全家)

@@ -29,4 +29,4 @@ for f in "${SCRIPT_DIR}"/prompts/*.md; do
 done
 
 echo
-echo "完成。重启 pi 后输入 / 检查 dev、dev-doc、dev-resume、dev-review 四个命令。"
+echo "完成。重启 pi 后输入 / 检查 dev、dev-doc、dev-resume、dev-review、dev-map 五个命令。"
