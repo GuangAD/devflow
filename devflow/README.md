@@ -40,7 +40,7 @@ extensions/                # 扩展:devflow 唯一的非技能产物
 **首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-pi install git:github.com/GuangAD/devflow@v2.0.0   # 全局,锚定 ref
+pi install git:github.com/GuangAD/devflow@v3.0.0   # 全局,锚定 ref
 pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
 pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
