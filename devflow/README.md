@@ -109,6 +109,8 @@ fog 与 ticket 的分界判据是**你现在能不能把问题说精确**,而不
 
 正文里的技术术语用英文,叙述用中文。下表是全部对应关系(含 devflow 自造词——自造词在正文中保留中文,英文仅供检索与外部对齐)。
 
+**本表只做中英对照,不复述定义。** 术语在 devflow 领域内的含义与边界(含易混点)见根目录 [`../CONTEXT.md`](../CONTEXT.md);某个决策为什么不是另一种做法,见 [`../docs/adr/`](../docs/adr/)。
+
 | 中文 | English | 备注 |
 |---|---|---|
 | 子代理 | subagent | |
@@ -144,4 +146,5 @@ fog 与 ticket 的分界判据是**你现在能不能把问题说精确**,而不
 - 改动扩展后必须跑它的测试(本包唯一不能靠人工核对的产物):`node --experimental-strip-types devflow/extensions/context-meter.test.mjs`。
 - 评审 subagent:直接用 pi-subagents 内置 `reviewer`,不做本地副本或覆盖,保持上游同步;复审 reduced reasoning tier 在派发时指定(model 后缀),不用本地 agent 覆盖。
 - implementer subagent:优先用环境提供的通用 subagent/任务工具,不做本地副本。模板见 `skills/dev/references/implementer-prompt.md`;它**不提交、不改 plan/spec/design、不评审自己**,这三条是它在流程里的边界。
+- 本仓库**自身**的领域词汇表在根目录 `CONTEXT.md`,架构决策记录在 `docs/adr/`。两者都由 `/dev-doc` 维护——这是 devflow 吃自己的狗粮:`domain-docs` 纪律的第一个适用对象就是它自己。改动流程契约后,若术语含义或决策理由有变,同步这两处(术语就地改,ADR 只可被取代、不可被修改)。
 - 留档未实现(升级路径):SDD 的流水线全套(四状态报告契约、五轮修复+熔断、模型分档、评审包脚本;controller/implementer 分离已随 implementer subagent 部分落地)、triage、并行排查、per-repo setup。

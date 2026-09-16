@@ -30,6 +30,8 @@ pi -e git:github.com/GuangAD/devflow
 - 使用说明与设计取舍:[devflow/README.md](devflow/README.md)
 - 进度与变更记录:[devflow/ROADMAP.md](devflow/ROADMAP.md)
 - 流程设计定稿(实施唯一依据):[analysis/03-distilled-workflow-design.md](analysis/03-distilled-workflow-design.md)
+- 领域词汇表(术语在本项目里指什么):[CONTEXT.md](CONTEXT.md)
+- 架构决策记录(当初为什么不用另一种做法):[docs/adr/](docs/adr/)
 
 ## 许可
 

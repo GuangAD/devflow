@@ -50,13 +50,20 @@
     - 复查发现并修复三类英译粘连(替换规则顺序导致长模式被短模式先吃:`实现者子代理`→`implementersubagent` 等),已全仓清零
   - **上下文预算判据收紧**:原判据「后续任务不需要频繁重读 design/spec/plan 才能继续」是自指的软判据——上下文压力最先损害的正是"感觉到自己挤了"这个能力。改为三条可数信号(同一节文档本会话内第三次重读 / 最近两任务都需回翻前文才能确认接口 / 已记不清早前决定只能靠 git 或文档反查)+ 底线(完成 4 个任务后至少检查一次);`dev/SKILL.md` 阶段 3「上下文预算」节与 `analysis/03` 图示、第七节同步
   - **新增窄扩展 `extensions/context-meter.ts`**(devflow 首个非技能产物):模型无法感知自身上下文占用,pi 也不把用量放进模型可见的上下文(它只在 TUI footer 给人类看),故由扩展读取 pi 官方接口 `ctx.getContextUsage()`,**注册只读工具 `context_usage`**,供 dev 阶段 3 在任务边界按需调用
-    - **传感器与策略分离**:扩展**只报数,不含任何阈值判断**;占比是否超标、何时去读,都写在 `dev/SKILL.md` 的「上下文预算」节(≥ 60% 提示切换)——改线不改代码、不重装包
+    - **传感器与策略分离**:扩展**只报数,不含任何阈值判断**;占比是否超标、何时去读,都写在 `dev/SKILL.md` 的「上下文预算」节(≥ 45% 提示切换)——改线不改代码、不重装包
     - **形态是工具而非注入**(2026-09-16 改定):早先版本挂在 `context` 钩子上、把读数追加到消息末尾。那会**夺走 prompt cache 的 message 级断点**——pi 把断点放在「最后一条 user/assistant/tool-result 文本内容」上(见 pi 文档 `models.md` 的 `cacheControlFormat` 说明),于是下一轮该位置换成别的消息,缓存条目「历史 + 读数行」不再是新请求的前缀,**整段历史命中不了**。改工具后读数只在被调用时进上下文,而那些位置本来就会被新内容顶掉。测试里有一条硬断言:**不注册任何事件钩子**
     - 数据来源与 TUI footer 同源(见 `@earendil-works/pi-coding-agent` 的 `footer-data-provider.d.ts`):末条 assistant 的真实 `usage` + 尾随消息估算,`contextWindow` 取当前模型实际窗口,故不写死窗口大小;接口返回 `tokens: null` 时(如刚压缩完)如实说明而不猜
     - 挂载:`package.json` 的 `pi.extensions` 指向该文件(与 `pi.skills`/`pi.prompts` 并列);同时补 `"type": "module"`,否则 Node 会因 `export default` 触发 ESM 重解析
     - **零运行时依赖**:`parameters` 必填且要求 TypeBox schema,而 TypeBox schema 即普通 JSON Schema,故写字面量 + `import type`(会被擦除)。取值 import `typebox` 会因解析不到该包而加载失败——它只存在于 pi 自己的依赖树里
     - `dev/SKILL.md` 阶段 3 第 8 步加入「调用 `context_usage`」,上下文预算节改为「工具 → 三条可数信号」两级降级;`analysis/03` 第一节「形态」由「pi 纯技能包、无扩展」改写、第七节同步;`analysis/04` 舍弃②标注 session hook 被部分回收、第四节新造新增一行;两份 README 同步
     - 测试已入库(本包唯一不能靠人工核对的产物):`devflow/extensions/context-meter.test.mjs`
+- 2026-09-16 首次执行自我沉淀(用本包自己的 `/dev-doc`),补齐本仓库自身的知识层两层——此前这两个位置都是空的:
+  - **根目录 `CONTEXT.md`** 领域词汇表 20 条,分三组:流程分层(轻/重/巨流程、三道门、升级棘轮)、巨流程(决策地图、destination、ticket、fog、frontier、out of scope)、开发(tracer-bullet slice、vertical/horizontal slice、ready set、implementer subagent、reviewer/self-review fallback、controller、seam、pinned case/mutation check/waiver、上下文预算与传感器策略分离)。按 `domain-docs` 格式写(一句话定义 + 边界 + 反义/易混淆),**不含实现细节**
+  - **`docs/adr/`** 架构决策记录 4 条:0001 巨流程用无 tracker 的决策地图承载 / 0002 实现任务串行派发 / 0003 上下文读数以只读工具形态进入 / 0004 术语英文化采用分层策略。每条只记「为什么不是另一种做法」,**不复述流程细节**——流程细节的单一真值仍是 `analysis/03`,这样切是为了避免两份文档漂移
+  - 门槛筛查剔除 4 项不合格候选(阈值写在哪 / 三条可数信号 / 保持命令启动 / 判巨优先于判重):它们要么改一行 Markdown 就能调、不算难逆转,要么已由 `analysis/03`、`analysis/04` 覆盖
+  - 顺带查出一处真冲突并统一:`frontier` 在本仓库有**两个含义**(grilling 语境的"现在就能问的问题集" vs 决策地图语境的"可解的 ticket 集合"),已在 `CONTEXT.md` 分开定义并注明与 ready set 的分层差异
+  - 交叉链接:根 README 新增「文档」两条指针、`devflow/README` 术语表加注「本表只做中英对照,定义见 CONTEXT.md」、维护说明新增一条(术语就地改,ADR 只可被取代)。位置经核实正确——`package.json` 只声明 `skills`/`prompts`/`extensions`,故根 `CONTEXT.md` 与 `docs/adr/` 不会被 `pi install` 带进用户项目
+  - 对齐过期数字:本文件上方条目原写判据 ≥ 60%,而 `dev/SKILL.md` 实际为 **≥ 45%**,已改齐(该 60% 亦出现在 2026-09-16 的提交信息里,提交信息不改)
 
 ## 进行中
 
