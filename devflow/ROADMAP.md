@@ -76,6 +76,7 @@
   - `tdd/SKILL.md`:mutation check 节新增归属声明——变异由正在改动这些文件的 implementer 在红绿循环内完成,controller 不代做
   - `verification/SKILL.md`:新增「不可达验收项」节——本机不可达即显式标注「未验证」并保留为遗留事项,禁止以不等价替代测试关闭验收项
   - `plan-template.md`:验收标准加门 2 不可达项预判;开发记录行内先记 BASE 短哈希(回退协议的 diff 基线,消「实际没错、字面没做」的偏离)
+- 2026-09-17 08:31 design-template「方案概述」支持可选 mermaid 架构图:图承载模块间依赖方向与数据流向,与文字鸟瞰互补不重复(图不复述职责描述),按需画、属 design.md 冻结范围;design-checklist 加对应自查条目(图文一致、开发期修订走回退协议);analysis/03 门 1 清单同步
 
 ## 进行中
 
