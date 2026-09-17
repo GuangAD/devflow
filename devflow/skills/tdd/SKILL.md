@@ -32,6 +32,8 @@ description: 测试驱动开发纪律:默认制红绿循环加白名单 waiver(�
 
 ## mutation check(pinned case 必做)
 
+**归属**:变异操作由正在改动这些文件的 implementer 在其红绿循环内完成;controller 不代做变异——controller 层面遇「评审声称 vs 源码实况」分歧,走「读源码静态路径证明 + 交复审者复核裁决」链(见 code-review 的 controller 处置速查)。
+
 **触发**:为已发现的缺陷补写 pinned case 时——评审发现的处置、Important/Minor 修复、以及任何「加个守卫防复发」的用例。常规 vertical slice 不必做;专为某个缺陷写的用例必须做。
 
 写完用例并看它变绿之后,回去撤销(或改坏)那一行修复,读数:

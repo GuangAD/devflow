@@ -79,7 +79,7 @@ description: 主开发工作流入口,含轻/重/巨三分 classifier(分类器)
 2. **实现**——两种形态二选一:
    - **优先 · 派 implementer subagent**(环境有 subagent/任务工具时):按 [references/implementer-prompt.md](references/implementer-prompt.md) 填写简报并派发,要求实现留在工作区、**不提交**、不改 plan/spec/design、发现设计空白即停手报告。优先用环境提供的通用 subagent/任务工具,与评审同一原则:不做本地副本,保持上游同步。
    - **fallback · 会话内实现**(环境无 subagent 能力时):读取 tdd 技能,按 spec.md 该接口组的用例表写失败测试 → 亲眼看红(预期原因)→ 最小实现 → 看绿。waiver 需留痕:"本任务 TDD waiver,理由是……"(已在 plan.md 预登记的 waiver,注明预登记)。
-3. 读取 verification 技能:以新鲜验证证据确认验收标准逐项达成。**subagent 回报的测试结果不算数,必须自己重跑。**
+3. 读取 verification 技能:以新鲜验证证据确认验收标准逐项达成。**subagent 回报的测试结果不算数,必须自己重跑。**将其报告声称的改动清单与 `git status` 实况逐项核对;不符即整体降信——不采信其一切未核实主张,全部亲验,违例记入开发记录。
 4. 读取 code-review 技能:按其方法派 subagent 评审本任务 diff(环境无 subagent 能力时按其 fallback procedure self-review 并标注"非独立")。
 5. 处置发现:**Critical 或方案性偏离计划 → 暂停询问用户**;Important/Minor 记入开发记录后续行。
 6. 提交:commit message 引用任务号与要点。
