@@ -12,7 +12,7 @@ description: 任务级代码评审纪律:派 subagent(子代理)独立评审 dif
 按 [references/reviewer-prompt.md](references/reviewer-prompt.md) 模板派发评审 subagent,提供:
 
 - 任务简报:plan.md 中该任务的完整文本(端到端行为、接口组、验收标准、编码方向)
-- 接口规格:spec.md 中该任务接口组的条目与用例表(评审对照:测试是否钉住所列行为,计划外导出是否登记变更记录)
+- 接口规格:spec.md 中该任务接口组的条目、用例表与覆盖声明(评审对照:测试是否钉住所列行为、矩阵行/铁律/枚举是否兑现,计划外导出是否登记变更记录)
 - 设计约束:design.md 中与该任务相关的全局约束(逐字复制)
 - 差异文件:任务改动写入 `.review/<任务号>.patch`(项目内相对路径,使用方仓库 `.gitignore` 应含 `.review/`),连同 `git log --oneline` 一起交给 reviewer——**diff 走文件,不灌进对话上下文**;提交前取 `git diff HEAD`,已提交取 `git diff <BASE>..<HEAD>`,禁止 `/tmp` 等跨环境路径
 - implementer 报告:测试结果(数字必须附来源)、关键决定、已由自动化测试锁定的性质清单(测试文件:用例名)

@@ -70,7 +70,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ### 重流程中你只需要在三个点出现
 
 1. **门 1**:访谈结束后确认两份文档——design.md(决策快照)+ spec.md 骨架(接口规格四件套+pinned case+接口面穷举清单)
-2. **门 2**:确认 spec.md 用例详版与开发计划(plan.md,任务=接口组)
+2. **门 2**:确认 spec.md 用例详版(含覆盖声明)与开发计划(plan.md,任务=接口组)
 3. **门 3**:验收最终报告
 
 门之间的开发阶段 agent 自治:按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
@@ -135,6 +135,7 @@ fog 与 ticket 的分界判据是**你现在能不能把问题说精确**,而不
 | 曳光弹切片 | tracer-bullet slice | 纵向贯穿各层、可独立验收的任务切片 |
 | 纵向切片 / 水平切片 | vertical slice / horizontal slice | |
 | 反向验证 | mutation check | 手工定向变异测试:撤销修复确认用例转红 |
+| 覆盖声明 | coverage declaration | 定义「测到什么程度算全」:等价类矩阵 + 机检铁律 + 枚举范围,随门 2 批准 |
 | 降思考档 | reduced reasoning tier | 复审派发时用 model 后缀指定 |
 | 轻流程 / 重流程 / 巨流程 | light track / heavy track / huge track | devflow 自造词 |
 

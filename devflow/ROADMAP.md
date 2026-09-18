@@ -78,6 +78,7 @@
   - `plan-template.md`:验收标准加门 2 不可达项预判;开发记录行内先记 BASE 短哈希(回退协议的 diff 基线,消「实际没错、字面没做」的偏离)
 - 2026-09-17 08:31 design-template「方案概述」支持可选 mermaid 架构图:图承载模块间依赖方向与数据流向,与文字鸟瞰互补不重复(图不复述职责描述),按需画、属 design.md 冻结范围;design-checklist 加对应自查条目(图文一致、开发期修订走回退协议);analysis/03 门 1 清单同步
 
+- 2026-09-18 07:33 seam 覆盖三层模型(源自 pi-web 中文金额转换器的边界覆盖讨论:8 条用例表盖不住零合并的维度组合):用例表定位收窄为「人审契约锚点,定规则」,覆盖标准改由新增的「覆盖声明」承载(等价类矩阵 + 机检铁律 + 枚举范围,门 2 批准「测到什么程度算全」),实现期照单兑现、发现维度漏项走 spec 变更记录回填、评审按声明审计。同步点:`spec-template.md` 节注释更新并在 pinned case 后加覆盖声明块;`dev/SKILL.md` 阶段 2 用例详版描述补覆盖声明;`design-checklist.md` 新增组合边界型 seam 自查条目;`tdd/SKILL.md` 默认制第 1 步补兑现要求并新增「覆盖兑现与回填」节;`code-review/SKILL.md` 与 `reviewer-prompt.md` 评审对照物加入覆盖声明
 ## 进行中
 
 无。
@@ -97,6 +98,7 @@
 
 ## 最近验证
 
+- 2026-09-18 07:33 本次改动交叉引用一致性检查:`grep 覆盖声明` 于 skills 目录 7 处命中(spec-template 2 / tdd 3 / dev 1 / design-checklist 1 / code-review 2),与计划改动点一一对应、无断链;spec-template.md 与 tdd/SKILL.md 改后全文通读,markdown 结构完好(覆盖声明块嵌套、新节位置在 mutation check 与卡住对照表之间);「3-8」表述全文仍仅指用例表,上限语义未变。人工核对通过
 - 2026-09-16 `extensions/context-meter.test.mjs` 14 项全过(注册名与 schema / **未注册任何事件钩子** / 低占比照实报出,证明不做阈值判断 / 高占比照实报出 / 报数含绝对量与窗口 / 读数不可用的三种情形都如实说明 / 窗口为 0 不除零 / 窗口变大时同样 tokens 占比下降)。运行:`node --experimental-strip-types devflow/extensions/context-meter.test.mjs`
   - 其中「未注册任何事件钩子」是**结构性断言**:它保证扩展不注入消息、不吃 prompt cache,是一旦有人想改回注入就会立刻变红的那道闸
 - 2026-09-09 全包交叉引用一致性检查:旧引用(「design.md 测试策略节」)已清零;spec.md/design-checklist 引用链完整;plan-template 任务详情节无残留重复行(人工核对通过)。**注**:自 2026-09-16 起本包不再是纯 Markdown,含一个 `.ts` 扩展,其行为由上述测试覆盖,不能只靠人工核对

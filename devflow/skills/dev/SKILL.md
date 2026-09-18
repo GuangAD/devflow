@@ -59,7 +59,7 @@ description: 主开发工作流入口,含轻/重/巨三分 classifier(分类器)
 
 ### 阶段 2:计划(不跑访谈,机械分解)
 
-设计已确认,先把 spec.md 从骨架补全为用例详版:每个 seam 条目 3-8 条用例(典型+边界+反例,期望值附事实源)。再切任务、排依赖、定验收标准——这是你的执行专业,按 [references/plan-template.md](references/plan-template.md) 写 `plan.md` 到同一目录。要求:
+设计已确认,先把 spec.md 从骨架补全为用例详版:每个 seam 条目 3-8 条用例(典型+边界+反例,期望值附事实源)加覆盖声明(等价类矩阵/机检铁律/枚举范围——定义实现期照单兑现的覆盖标准,组合边界不得只靠用例表)。再切任务、排依赖、定验收标准——这是你的执行专业,按 [references/plan-template.md](references/plan-template.md) 写 `plan.md` 到同一目录。要求:
 
 - tracer-bullet slice:每任务纵向贯穿各层、可独立验收、单个会话可容纳
 - 任务 = spec.md 的一组 seam 条目从红到绿(任务详情引用接口组);含编码方向与数据结构落地说明;大任务在此拆分
