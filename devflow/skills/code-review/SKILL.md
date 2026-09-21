@@ -50,6 +50,7 @@ description: 任务级代码评审纪律:派 subagent(子代理)独立评审 dif
 - **Important**:需求缺失、脆弱实现、可维护性明显受损 → 修复后继续;修复需重跑覆盖该改动的测试。
 - **Minor**:风格、命名、可选优化 → 记入开发记录,不阻塞;门 3 报告中汇总呈现。
 
+**缺陷修复的闭合条件(可判定)**:凡处置产生守卫用例(Critical/Important 修复、哨兵、回归断言、任何「防复发」断言),开发记录必须有一行 mutation check 留痕(改坏修复 → 该用例转红 → 还原全绿,做法见 tdd 技能);缺失即记 Minor 并要求补做,补做完成前该处置不得标记闭合。
 修复后的复审按 [references/re-review-prompt.md](references/re-review-prompt.md) 模板派发 `reviewer`,并在派发时 reduced reasoning tier(model 参数传完整模型 id + `:low` 后缀;被注册表拒绝时回退默认档,不重试):只验证被标记的发现是否解决、修复本身有无引入新问题(范围收窄,不重新漫审)。同一发现修复两轮仍不过 → 升级为用户决策。
 
 ## 整特性终审(门 3 之前)
