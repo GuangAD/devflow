@@ -17,6 +17,8 @@ description: 任务级代码评审纪律:派 subagent(子代理)独立评审 dif
 - 差异文件:任务改动写入 `.review/<任务号>.patch`(项目内相对路径,使用方仓库 `.gitignore` 应含 `.review/`),连同 `git log --oneline` 一起交给 reviewer——**diff 走文件,不灌进对话上下文**;提交前取 `git diff HEAD`,已提交取 `git diff <BASE>..<HEAD>`,禁止 `/tmp` 等跨环境路径
 - implementer 报告:测试结果(数字必须附来源)、关键决定、已由自动化测试锁定的性质清单(测试文件:用例名)
 
+**首次写 `.review/` 前**:检查使用方仓库 `.gitignore` 是否含 `.review/`;不含则提示用户添加并等确认——patch 文件误入提交会污染线性历史(每任务一 commit 是回退协议的前提)。
+
 **评审能力矩阵**(按实际环境对号入座,行为可预测):
 
 | 环境 | reviewer 行为 | controller 前置义务 |
@@ -50,7 +52,7 @@ description: 任务级代码评审纪律:派 subagent(子代理)独立评审 dif
 - **Important**:需求缺失、脆弱实现、可维护性明显受损 → 修复后继续;修复需重跑覆盖该改动的测试。
 - **Minor**:风格、命名、可选优化 → 记入开发记录,不阻塞;门 3 报告中汇总呈现。
 
-**缺陷修复的闭合条件(可判定)**:凡处置产生守卫用例(Critical/Important 修复、哨兵、回归断言、任何「防复发」断言),开发记录必须有一行 mutation check 留痕(改坏修复 → 该用例转红 → 还原全绿,做法见 tdd 技能);缺失即记 Minor 并要求补做,补做完成前该处置不得标记闭合。
+**缺陷修复的闭合条件(可判定)**:凡处置产生守卫用例(Critical/Important 修复、哨兵、回归断言、任何「防复发」断言),开发记录必须有一条 mutation check 留痕(改坏修复 → 该用例转红 → 还原全绿,做法见 tdd 技能);缺失即记 Minor 并要求补做,补做完成前该处置不得标记闭合。
 修复后的复审按 [references/re-review-prompt.md](references/re-review-prompt.md) 模板派发 `reviewer`,并在派发时 reduced reasoning tier(model 参数传完整模型 id + `:low` 后缀;被注册表拒绝时回退默认档,不重试):只验证被标记的发现是否解决、修复本身有无引入新问题(范围收窄,不重新漫审)。同一发现修复两轮仍不过 → 升级为用户决策。
 
 ## 整特性终审(门 3 之前)

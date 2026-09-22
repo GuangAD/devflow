@@ -73,6 +73,8 @@ description: 主开发工作流入口,含轻/重/巨三分 classifier(分类器)
 
 ### 阶段 3:开发(自治,任务间不停顿)
 
+**环境前提(派发前先探测)**:implementer 与 reviewer 是**角色名**,由环境的 subagent/任务工具解析承接(如 pi-subagents 的内置 `worker` 以 implementer 为别名、内置 `reviewer` 为只读评审);本包不做本地副本。派发前确认环境确有承接能力——没有就走各步写明的 fallback(会话内实现 / self-review 并标注"非独立"),别把简报派给不存在的能力。`context_usage` 工具由本包 `extensions/context-meter.ts` 注册,未安装或读数不可用时按「上下文预算」退回三条可数信号。
+
 任务顺序由依赖决定(见本节末尾「依赖与派发顺序」)。对每个**已解锁任务**,按序执行:
 
 1. 记录 `BASE=$(git rev-parse HEAD)`。
@@ -83,7 +85,7 @@ description: 主开发工作流入口,含轻/重/巨三分 classifier(分类器)
 4. 读取 code-review 技能:按其方法派 subagent 评审本任务 diff(环境无 subagent 能力时按其 fallback procedure self-review 并标注"非独立")。
 5. 处置发现:**Critical 或方案性偏离计划 → 暂停询问用户**;Important/Minor 记入开发记录后续行。
 6. 提交:commit message 引用任务号与要点。
-7. 在 plan.md 任务清单勾选该任务并回填 commit 哈希;"开发记录"节追加一行(结果/评审发现/waiver/哈希,凡动过 spec.md 注明"变更记录已登记",**并写入 implementer 回报的「下一步用得上的结论」**);删除本轮评审的 `.review/` diff 文件。
+7. 在 plan.md 任务清单勾选该任务并回填 commit 哈希;"开发记录"节追加一块(格式见 plan-template:ledger 首行 + 字段缩进子行,空字段省略;凡动过 spec.md 注明"变更记录已登记",**并写入 implementer 回报的「下一步用得上的结论」**);删除本轮评审的 `.review/` diff 文件。
 8. 更新已完成任务集,重算 ready set;调用 `context_usage` 读一次上下文占比,按「上下文预算」的判据决定继续下一个任务,还是提示用户换会话。
 
 **开发中状态一律落盘**:进度在 plan.md,不在会话上下文里。上下文被压缩后,先重读 design.md、spec.md(含变更记录)与 plan.md 再继续;信文档与 git 历史,不信记忆。
@@ -130,7 +132,7 @@ plan.md 每个任务的「依赖」字段构成一张 DAG。**每次准备做下
 
 ### 门 3:最终确认
 
-全部任务完成后,呈现最终报告:**验收清单逐项结果、各任务评审记录、TDD waiver 清单、完整提交列表、遗留事项(记录在案的 Minor)**。停下等待用户确认。确认后收尾:清理临时产物(含 `.review/` 目录)、写一段收尾总结(含本次沉淀的 CONTEXT.md/ADR 清单)。
+全部任务完成后,呈现最终报告:**验收清单逐项结果、各任务评审记录、TDD waiver 清单、完整提交列表、遗留事项(记录在案的 Minor)**。停下等待用户确认。确认后收尾:清理临时产物(含 `.review/` 目录)、写一段收尾总结(含本次沉淀的 CONTEXT.md/ADR 清单)。一并处理 spec.md「变更记录」节:默认原样留档(它是开发期接口真值演进的证据);行数多到拖累 /dev-resume 回读时,在 spec.md 中折叠为一段摘要,并注明完整记录见 git 历史。
 
 ## 巨流程(路由到 /dev-map)
 

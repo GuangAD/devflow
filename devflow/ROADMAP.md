@@ -83,6 +83,22 @@
   - 共享盲区——矩阵/枚举声明/评审三道关卡共用同一份维度清单,「跨段双内部零」组合整批漏列(仅单段扫掠+随机概率覆盖):`spec-template.md` 覆盖声明矩阵项补「维度两两交叉自检」并新增「参考实现吸收」条(存在参考实现/前代基线须吸收其敏感输入为矩阵行或哨兵);`design-checklist.md` 加对应自查条目(含教训)
   - mutation check 义务断链——规则在 tdd 正文、检查链无人认领,两代项目触发均未留痕:`tdd/SKILL.md` 触发分类消除模糊(评审处置产生的守卫用例一律按缺陷补写对待);`implementer-prompt.md` 执行纪律新增第 8 条「缺陷修复的完成定义 = 修复+守卫用例+反向验证+留痕四件齐」、controller 处置速查加核对行;`code-review/SKILL.md` 分级与处置节新增「缺陷修复的闭合条件」(无留痕即 Minor,补做前不闭合)
 
+- 2026-09-22 架构评审回流(全量契约评审结论:骨架不动、点状修补;P1 三项 + P2 三项):
+  - `dev-resume/SKILL.md` 第二步改 git log **双向核对**:补「commit 在但勾选缺」的反向核对——中断发生在「提交后、落盘前」窗口时,确认 commit 内容与任务相符后补勾选、补记开发记录,不重做该任务
+  - `dev/SKILL.md` 阶段 3 新增「环境前提(派发前先探测)」段:implementer 与 reviewer 是角色名,由环境 subagent/任务工具解析承接(pi-subagents 内置 worker 别名含 implementer、内置 reviewer 只读),无承接能力走各步 fallback;`context_usage` 未注册或读数不可用走三条可数信号
+  - `code-review/SKILL.md` 派发节新增:首次写 `.review/` 前检查使用方仓库 `.gitignore` 含 `.review/`,不含则提示添加并等确认(patch 误入提交会污染线性历史)
+  - `dev/SKILL.md` 门 3 收尾补 spec.md「变更记录」节处置:默认原样留档;行数拖累 /dev-resume 回读时折叠为一段摘要,注明完整记录见 git 历史
+  - `dev-doc/SKILL.md` 补分工声明:本文件只是路由入口,纪律单一真值在 domain-docs
+  - `devflow/README.md` 维护说明新增「受控复述点清单」:mutation check(tdd / code-review / implementer-prompt / plan-template / analysis-03)、TDD waiver(tdd / plan-template / dev / analysis-03)、上下文预算与 45% 阈值(dev / analysis-03 两处 / ADR-0003 引用但不可改),改其一必查其余
+  - `analysis/03` 同步并修两处漂移:第七节阈值 **≥60% → ≥45%**(dev/SKILL.md、ADR-0003、analysis/13 均为 45%,03 是唯一残存旧值——复述点清单建立当日即捕获首起漂移);第八节 typo「偷偹」→「偷偷」;第五节图示上下文预算行补 context_usage 工具优先;第七节新增「环境前提」条;第九节 resume 改双向核对;门 3 图示补变更记录处置
+
+- 2026-09-22 呈报文档可读性改造(源自 pi-web-new 门点文档评审:文档按 agent 解析偏好写成巨型单段 bullet 与管道符流水账,人无法扫读、门点形同虚设):
+  - 三模板新增**排版纪律**(design-template 头部 / spec-template seam 节注释):一个 bullet 一个事实(超 2 子句拆行)、编号项(①②③)分行成子 bullet、标题只放标识符(模块路径/函数签名)职责说明移下一行、多组「输入 → 期望」对照一律用表格;各嵌「坏 → 好」对照示例
+  - `spec-template.md`:模块/条目标题瘦身(括注说明移出标题);四件套内部允许子 bullet;编码方向节要求多步顺序写编号步骤列表(箭头只许在步内)、已知坑每条独立 bullet
+  - `plan-template.md` 开发记录改**块格式**:ledger 首行(任务 N | 状态 | commit)+ 字段缩进子行(BASE/评审/waiver/变更记录/结论/备注),空字段一律省略(评审与结论除外);resume 按标签读、人按行读,互不牺牲
+  - 口径同步:`dev/SKILL.md` 步 7「追加一行」→「追加一块」;`tdd/SKILL.md` 留痕「开发记录行」→「开发记录块」;`code-review/SKILL.md` 闭合条件「有一行」→「有一条」;`implementer-prompt.md` 速查「该任务行」→「该任务块」
+  - `design-checklist.md` 新增可读性自查条目(附教训);`analysis/03` 同步(第五节门 1 排版纪律两行、第九节开发记录块格式注记)
+
 ## 进行中
 
 无。
@@ -101,6 +117,10 @@
 无。
 
 ## 最近验证
+
+- 2026-09-22 可读性改造核查:「开发记录行/该任务行/追加一行」口径 grep 复查,旧称仅存于 ROADMAP 历史记录;plan-template 块格式、spec-template seam 节改后通读,markdown 结构完好(注释块嵌套列表、表格、标题层级无损);三模板排版纪律措辞互查一致(子句拆行/编号分行/标题瘦身/对照表格四条);顺手修掉 seam 注释里一处「只写 函数名」多余空格。人工核对通过
+
+- 2026-09-22 本次改动核查:改动点 grep 复查全部命中(双向核对×2、环境前提×2、`.gitignore` 检查×2、变更记录处置×2、复述点清单×1);「≥60%」与「偷偹」全仓清零(仅存于 ROADMAP 历史记录);dev-resume、code-review 改后通读 markdown 结构完好;45% 现存位置(dev/SKILL.md、analysis/03 两处、ADR-0003、analysis/13)与复述点清单登记一致。人工核对通过
 
 - 2026-09-21 03:19 本次改动核查:5 个技能文件改后逐处 diff 复核(含一次锚点跨文件撞车的错插,当场定位还原并换无歧义锚点重做);新增条文术语口径与现状一致(mutation check/反向验证混用沿用、哨兵为描述性用词不入术语表);编辑前先读取确认仓库与安装副本逐字节一致,全部改动落在仓库后同步安装副本并逐文件比对。人工核对通过
 - 2026-09-18 07:33 本次改动交叉引用一致性检查:`grep 覆盖声明` 于 skills 目录 7 处命中(spec-template 2 / tdd 3 / dev 1 / design-checklist 1 / code-review 2),与计划改动点一一对应、无断链;spec-template.md 与 tdd/SKILL.md 改后全文通读,markdown 结构完好(覆盖声明块嵌套、新节位置在 mutation check 与卡住对照表之间);「3-8」表述全文仍仅指用例表,上限语义未变。人工核对通过

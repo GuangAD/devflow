@@ -40,7 +40,7 @@ extensions/                # 扩展:devflow 唯一的非技能产物
 **首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-pi install git:github.com/GuangAD/devflow@v3.0.0   # 全局,锚定 ref
+pi install git:github.com/GuangAD/devflow@v3.2.1   # 全局,锚定 ref
 pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
 pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
@@ -148,4 +148,8 @@ fog 与 ticket 的分界判据是**你现在能不能把问题说精确**,而不
 - 评审 subagent:直接用 pi-subagents 内置 `reviewer`,不做本地副本或覆盖,保持上游同步;复审 reduced reasoning tier 在派发时指定(model 后缀),不用本地 agent 覆盖。
 - implementer subagent:优先用环境提供的通用 subagent/任务工具,不做本地副本。模板见 `skills/dev/references/implementer-prompt.md`;它**不提交、不改 plan/spec/design、不评审自己**,这三条是它在流程里的边界。
 - 本仓库**自身**的领域词汇表在根目录 `CONTEXT.md`,架构决策记录在 `docs/adr/`。两者都由 `/dev-doc` 维护——这是 devflow 吃自己的狗粮:`domain-docs` 纪律的第一个适用对象就是它自己。改动流程契约后,若术语含义或决策理由有变,同步这两处(术语就地改,ADR 只可被取代、不可被修改)。
+- **受控复述点清单**(同一规则在多处复述是刻意的——每个角色在自己的读物里都需要它;**改其一必查其余**,复述断链在 2026-09-21 实证中真实发生过):
+  - mutation check(反向验证):`tdd/SKILL.md`(归属与做法,源头)/ `code-review/SKILL.md`(闭合条件)/ `dev/references/implementer-prompt.md`(执行纪律第 8 条 + 速查表)/ `dev/references/plan-template.md`(开发记录注释)/ `../analysis/03` 第七节
+  - TDD waiver:`tdd/SKILL.md`(allowlist 与留痕,源头)/ `dev/references/plan-template.md`(预登记)/ `dev/SKILL.md`(轻流程汇报 + 阶段 3 步 2 与步 7)/ `../analysis/03` 第七节
+  - 上下文预算与 45% 阈值:`dev/SKILL.md`「上下文预算」节(唯一真值)/ `../analysis/03` 第五节图示与第七节(两处);`extensions/context-meter.ts` 只报数、不含判据(测试有结构性断言看守)。`../docs/adr/0003` 也引用了该数值但 ADR 不可修改——阈值若变更,用新 ADR 取代而非就地改
 - 留档未实现(升级路径):SDD 的流水线全套(四状态报告契约、五轮修复+熔断、模型分档、评审包脚本;controller/implementer 分离已随 implementer subagent 部分落地)、triage、并行排查、per-repo setup。

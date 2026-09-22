@@ -8,7 +8,7 @@
 
 ```bash
 # 全局安装(锚定 ref,升级时改为新 ref 重跑)
-pi install git:github.com/GuangAD/devflow@v3.0.0
+pi install git:github.com/GuangAD/devflow@v3.2.1
 
 # 或项目级安装(写入 .pi/settings.json,团队共享)
 pi install -l git:github.com/GuangAD/devflow
