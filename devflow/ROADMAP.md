@@ -110,6 +110,12 @@
   - `analysis/03` 第七节 seam 纪律同步同句
   - 注:机检铁律行因全半角标点差异经「ASCII 锚点 + 载荷文件」方式写入(Edit/PowerShell 字面量匹配均失败,字节级核实文件内容正常)
 
+- 2026-10-13 03:33 新增 DESIGN.md 规范支持(源自项目规范接入方案讨论,采纳 Google Labs Stitch 开源的 google-labs-code/design.md 视觉规范,定位为项目规范体系的视觉类成员,与 AGENTS.md 指针、docs/standards/ 体系配合):
+  - `dev/SKILL.md` 阶段 1 新增「涉及 UI 时先感知 DESIGN.md」:特性触及界面/视觉时检查项目根或 `docs/standards/`,有则纳入访谈素材;无则非阻塞推荐一次(一句话价值 + spec 仓库链接,可从现有 UI 代码提炼初稿),接受则纳入访谈或另开特性(用户定),婉拒则由 design.md 约束节留痕临时视觉依据;项目 AGENTS.md 写明「DESIGN.md 已知晓,暂不采用」即不再推荐
+  - `design-template.md` 技术栈与依赖约束节补视觉约束写法:有 DESIGN.md 以引用写入(「视觉遵循 DESIGN.md(路径);本次例外:…」),不复述 token 值;无且涉及 UI 时留痕临时依据。经 plan.md 全局约束沿 implementer/reviewer 简报自动传递(既有约束链,零改动)
+  - 边界:本包不内置 DESIGN.md 解析/校验(避免重复造轮子与前端依赖侵入通用包),机检由项目侧以 `@google/design.md` npm 包接入 lint,controller 经 verification 重跑覆盖
+- 2026-10-13 10:33 发布 v3.3.0(起点 v3.2.3):内容即上方 DESIGN.md 支持条目;实项目首验(pi-notes 便签板,77 用例全过)见「最近验证」,婉拒留痕与静默行两分支待补测;安装 ref 同步根 README 与 devflow/README(@v3.2.1 → @v3.3.0);tag 沿用附注约定
+
 ## 进行中
 
 无。
@@ -128,6 +134,9 @@
 无。
 
 ## 最近验证
+
+- 2026-10-13 08:04 DESIGN.md 支持 pi-notes(便签板)实项目首验:重流程全程走通(门 1→门 2→3 任务→门 3,9 commit)。契约核对——design.md 约束节按模板引用式写法(「遵循 DESIGN.md(项目根);本次例外:无」);DESIGN.md 随首任务起草,token 结构完整(colors/typography/rounded/spacing/components + 引用语法);视觉约束经 plan.md 全局约束逐字传递;视觉起草与样式按 TDD waiver 预登记走门 3 目测替代验收;style.css 以 CSS 变量落地 token 并注释来源;AGENTS.md 工程边界入「遵循 DESIGN.md,不硬编码色值」。controller 亲验 `npm test` 77 用例全过。未测分支:婉拒留痕与 AGENTS.md 静默行(本次直接走接受路径),待补测
+- 2026-10-13 03:33 本次改动核查:DESIGN.md 相关改动 grep 全仓复查,落点仅 3 文件(`dev/SKILL.md` 阶段 1 / `design-template.md` 技术栈与依赖约束节 / ROADMAP 登记行),无其他散落提及;感知段「写法见模板」与模板引用句口径互恰(引用不复述 token、婉拒留痕临时依据措辞一致);ROADMAP 新条目落位于已完成节末尾(09-23 条目后、进行中前),子项缩进与列表结构完好。人工核对通过
 
 - 2026-09-22 可读性改造核查:「开发记录行/该任务行/追加一行」口径 grep 复查,旧称仅存于 ROADMAP 历史记录;plan-template 块格式、spec-template seam 节改后通读,markdown 结构完好(注释块嵌套列表、表格、标题层级无损);三模板排版纪律措辞互查一致(子句拆行/编号分行/标题瘦身/对照表格四条);顺手修掉 seam 注释里一处「只写 函数名」多余空格。人工核对通过
 
