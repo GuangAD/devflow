@@ -47,11 +47,11 @@ description: 主开发工作流入口(dev workflow):接到需求(intake) → 需
 
 **任务契约**:按 [references/task-spec-template.md](references/task-spec-template.md) 为每个任务写 `tasks/T<n>.md`——接口伪代码、开发步骤、测试规格。伪代码只写调用形状,不写算法。
 
-全部写完后跑 [references/self-check.md](references/self-check.md) 的九条自查,就地修完,然后呈报门 2。
+全部写完后跑 [references/self-check.md](references/self-check.md) 的十条自查,就地修完,然后呈报门 2。
 
 ### 门 2
 
-按 [references/self-check.md](references/self-check.md) 的「门 2 呈报」执行:任务清单与依赖、每个任务的接缝与用例条数、覆盖标准的档位、九条自查结果,加三个问题,**停下等一句确认**。
+按 [references/self-check.md](references/self-check.md) 的「门 2 呈报」执行:任务清单与依赖、每个任务的接缝与用例条数、覆盖标准的档位、十条自查结果,加三个问题,**停下等一句确认**。
 
 **批准后立即提交 `plan.md`、`spec.md` 与 `tasks/`。** 此门之后不再停顿,直到门 3。
 

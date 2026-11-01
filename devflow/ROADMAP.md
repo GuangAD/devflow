@@ -23,8 +23,8 @@
 - 2026-11-01 **工作流重设计**（设计定稿 `../analysis/16-workflow-redesign.md`，讨论与实证 `../analysis/15-workflow-redesign-discussion.md`）:
   - **入口从分类改为判断**:删轻/重/巨三档与 classifier;新增 `dev/references/intake.md`(先看 → 两个判断 → 分析四件事 → 一轮 3-6 个 → 定大小);修 bug 分流到 `debugging`,不写需求文档
   - **四层文档**:`brief.md`(门 1,冻结)/ `plan.md` + `spec.md` + `tasks/T<n>.md`(门 2);新增 `brief-template.md`、`slice.md`、`tech-spec-template.md`、`task-spec-template.md`;删除 `design-template.md`、`spec-template.md`、`plan-template.md`、`design-checklist.md`
-  - **门 2 恢复**:第一次端到端实跑证明「通知不停顿」等于不存在(agent 在门 1 后一口气跑到门 3,全会话只发 3 条文本);呈报形态定为任务清单 + 接缝与用例条数 + 覆盖标准档位 + 九条自查 + 三个问题,文件在呈报时已落盘
-  - **九条自查**:原十条重排为七条主检 + 两条排版;新增第 7 条「接缝数量与名称对得上 brief」——唯一能抓需求阶段漏项的一条
+  - **门 2 恢复**:第一次端到端实跑证明「通知不停顿」等于不存在(agent 在门 1 后一口气跑到门 3,全会话只发 3 条文本);呈报形态定为任务清单 + 接缝与用例条数 + 覆盖标准档位 + 十条自查 + 三个问题,文件在呈报时已落盘
+  - **十条自查**:原十条重排为八条主检 + 两条排版;新增第 7 条「接缝数量与名称对得上 brief」——唯一能抓需求阶段漏项的一条,与第 8 条「每条未定项都有承接」——防止欠账一路混到门 3
   - **契约精度精简**:四件套 → 签名 + 调用形状;副作用与错误行为只在有状态/会失败时写,但凡创建对象/持有缓冲/能累积的一律必写
   - **切片规则补落地**:prefactor 补进(账上早写「保留」但 SKILL 从未落地);expand–contract 重新采纳并加两条限定;新增「依赖要看用例能不能跑」「挡谁必须逐个点名」
   - **巨流程并入 dev**:删除 `skills/dev-map/` 与 `prompts/dev-map.md`,探路 = brief 草稿;`dev/SKILL.md` 的 classifier 一节删除

@@ -26,7 +26,7 @@ pi -e git:github.com/GuangAD/devflow
 
 - **命令**：dev（主入口）/ dev-doc（知识沉淀）/ dev-resume（断点续做）/ dev-review（代码库巡检）
 - **纪律技能**：grilling（访谈）、tdd（红绿循环 + waiver 留痕 + mutation check）、code-review（subagent 评审 + 分级处置）、debugging（根因先行）、verification（证据先于声称）、domain-docs（词汇表 + ADR）等 11 项
-- **模板与派发**：`dev/references/` 下 intake、brief、slice、tech-spec、task-spec 五份模板，九条自查清单，以及 implementer 派发模板
+- **模板与派发**：`dev/references/` 下 intake、brief、slice、tech-spec、task-spec 五份模板，十条自查清单，以及 implementer 派发模板
 - **扩展**：context-meter（注册只读工具 `context_usage` 读上下文占比；只报数、不判阈值，阈值写在 dev 技能里；不注入任何消息，零运行时依赖）
 - **自检**：`devflow/tests/skill-check.sh`（技能文档字节上限、引用完整、无旧概念残留）
 
