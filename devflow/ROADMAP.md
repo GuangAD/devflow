@@ -2,18 +2,35 @@
 
 ## 当前阶段
 
-**v3.0.0 已发布,并完成发布后首次实战实证**:pi-usage(pi 会话用量分析器),2026-09-16~17 走完重流程全链路(6 任务 / 15 次子代理派发 / 三道门),暴露子代理写入通道、reviewer 取证口径、平台类验收等新维度问题,对应的阶段 3 子代理纪律硬化已于 2026-09-17 回流本仓库(见已完成末条)。首次实证 pi-w(v2)的结论摘要如下。
+**2026-11-01 完成工作流重设计**（待发 v4.0.0）。设计定稿见 `../analysis/16-workflow-redesign.md`，讨论全过程与实证记录见 `../analysis/15-workflow-redesign-discussion.md` 第九节。
 
-实证结论摘要(承重机制见 `../analysis/03-distilled-workflow-design.md` 第七节,执行证据见 pi-w 自身 plan.md 的开发记录):
+核心变化：
 
-- **咬得住**:design.md 的冻结语义在开发期没有被侵蚀,spec.md 留了 15 条变更记录如实登记实现期修订,没有出现「文档写过就算」的空转。
-- **规格四件套确实在拦**:门 3 前的独立终审靠接口面穷举清单的完备性检查,抓出 self-review 漏登的 `web/src/types.ts` 全部 19 个类型导出。清单是被真用起来核对的,不是写完就放着。
-- **回退协议全程未被触发**:design.md 一次也没被推翻;两次文档修订都走的是 spec.md 演进路径(任务 3 的用例笔误更正、门 3 M4 语义落差的连带修订)。轻量 Fix 不升级为设计回退,这条路走得通。
-- **代价落在维护上**:spec.md 长约 466 行、需持续登记变更记录,是本次最重的文档开销;换来的是门 1 之后几乎不再返工。下一个项目应继续观察这份开销是否随特性规模线性增长。
+- 入口从「先分类（轻/重/巨）」改为「先看再判」：要做事 / 有东西坏了 / 复述不出来；产出多长是判断的结果
+- 巨流程并入 `dev`，不再有独立 `/dev-map` 命令（ADR-0006）
+- 产物从 design/spec/plan 三份改为 brief/plan/spec/tasks 四层，按**批准层级**划分（ADR-0005）
+- **门 2 恢复**：批切片与全部任务契约。这道门曾被判为「机械分解」而砍掉，第一次端到端实跑直接否掉了那个判断
+- 契约精度精简：签名 + 调用形状；副作用与错误行为只在有状态/会失败时写
+- `dev/SKILL.md` 15.7 KB → 8.9 KB，细节进 `references/`
+- 新增 `tests/skill-check.sh`：字节上限、引用完整、旧概念残留、frontmatter
 
-下一步:发布下一版 ref 后重装验证安装链路;pi-w 遗留的 v2.1.0 模板回流见待办。
+已做两次端到端实证（空项目 + 空仓库，Node 24）。耗时分布显示：门 0→门 1 占 20m47s，门 2 只占 2m59s——时间花在需求上，后面就快。
+
+下一步：打 v4.0.0 tag → 重装全局验证安装链路。
 
 ## 已完成
+
+- 2026-11-01 **工作流重设计**（设计定稿 `../analysis/16-workflow-redesign.md`，讨论与实证 `../analysis/15-workflow-redesign-discussion.md`）:
+  - **入口从分类改为判断**:删轻/重/巨三档与 classifier;新增 `dev/references/intake.md`(先看 → 两个判断 → 分析四件事 → 一轮 3-6 个 → 定大小);修 bug 分流到 `debugging`,不写需求文档
+  - **四层文档**:`brief.md`(门 1,冻结)/ `plan.md` + `spec.md` + `tasks/T<n>.md`(门 2);新增 `brief-template.md`、`slice.md`、`tech-spec-template.md`、`task-spec-template.md`;删除 `design-template.md`、`spec-template.md`、`plan-template.md`、`design-checklist.md`
+  - **门 2 恢复**:第一次端到端实跑证明「通知不停顿」等于不存在(agent 在门 1 后一口气跑到门 3,全会话只发 3 条文本);呈报形态定为任务清单 + 接缝与用例条数 + 覆盖标准档位 + 九条自查 + 三个问题,文件在呈报时已落盘
+  - **九条自查**:原十条重排为七条主检 + 两条排版;新增第 7 条「接缝数量与名称对得上 brief」——唯一能抓需求阶段漏项的一条
+  - **契约精度精简**:四件套 → 签名 + 调用形状;副作用与错误行为只在有状态/会失败时写,但凡创建对象/持有缓冲/能累积的一律必写
+  - **切片规则补落地**:prefactor 补进(账上早写「保留」但 SKILL 从未落地);expand–contract 重新采纳并加两条限定;新增「依赖要看用例能不能跑」「挡谁必须逐个点名」
+  - **巨流程并入 dev**:删除 `skills/dev-map/` 与 `prompts/dev-map.md`,探路 = brief 草稿;`dev/SKILL.md` 的 classifier 一节删除
+  - **`dev/SKILL.md` 瘦身**:15,762 → 8,956 字节(细节进 references,守 20,000 字符的 compaction 墙)
+  - **新增静态检查** `tests/skill-check.sh`:字节上限、references 存在性、旧文件名、旧概念、frontmatter
+  - 同步:两份 README、`CONTEXT.md`(20 词条重写为 18 条、按流程排序)、`grilling`(3-6 上限 + 问题三分类)、`tdd`/`code-review`/`dev-resume`/`debugging`/`dev-doc`/`dev-review` 的 description 与规格来源、`implementer-prompt`/`reviewer-prompt`;新增 ADR-0005/0006 并把 ADR-0001 标注为被取代;`analysis/03` 标注被取代,`04` 追加第七节,`15` 追加第九节
 
 - 2026-09-09 v2 流程变更(源自 threejs-labs 三项目实证回顾):
   - 新增 `skills/dev/references/spec-template.md`(实现规格模板:接口四件套+pinned case+接口面穷举清单+非 seam 与视觉验收+变更记录)

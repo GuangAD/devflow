@@ -1,7 +1,7 @@
 # 蒸馏工作流设计定稿
 
 > 由 mattpocock/skills 与 obra/superpowers 两项目蒸馏而来,经苏格拉底式访谈逐项确认。
-> 本文档是实施的唯一依据。
+> 本文档是实施的唯一依据。**已被 [16-workflow-redesign.md](16-workflow-redesign.md) 取代(2026-11-01)**,保留作为推理链证据,不再维护。
 > 修订 v2(2026-09-09):依据 threejs-labs 三项目实证回顾,设计产物拆分为 design.md(决策快照,冻结)+ spec.md(实现规格,演进);seam 纪律升格为接口规格四件套+接口面穷举清单+变更记录。
 
 ## 一、定位与形态

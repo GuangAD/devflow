@@ -1,5 +1,5 @@
 ---
-description: 启动 dev 主开发工作流(自动分类轻/重/巨流程,即 light/heavy/huge track)
+description: 启动 dev 主开发工作流(接到需求 → 需求文档 → 切片 → 规格与任务契约 → 逐任务开发 → 收尾)
 argument-hint: "<任务描述>"
 ---
 读取「dev」技能的 SKILL.md(在你的可用技能列表中找到名为 dev 的技能),严格按其流程处理以下任务:
