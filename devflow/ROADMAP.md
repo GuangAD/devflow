@@ -1,25 +1,23 @@
 # ROADMAP
 
 ## 当前阶段
-
-**2026-11-01 完成工作流重设计**（待发 v4.0.0）。设计定稿见 `../analysis/16-workflow-redesign.md`，讨论全过程与实证记录见 `../analysis/15-workflow-redesign-discussion.md` 第九节。
+**2026-11-03 工作流规格与执行补强**（已随 v4.1.0 发布）。第一轮需求收集修订见 `../analysis/16-workflow-redesign.md` 第十二节；spec / task-spec 构成与切片 quiz 见第十三节；编码阶段接口预检、命令预期与高风险输入测试映射见第十四节。
 
 核心变化：
 
-- 入口从「先分类（轻/重/巨）」改为「先看再判」：要做事 / 有东西坏了 / 复述不出来；产出多长是判断的结果
-- 巨流程并入 `dev`，不再有独立 `/dev-map` 命令（ADR-0006）
-- 产物从 design/spec/plan 三份改为 brief/plan/spec/tasks 四层，按**批准层级**划分（ADR-0005）
-- **门 2 恢复**：批切片与全部任务契约。这道门曾被判为「机械分解」而砍掉，第一次端到端实跑直接否掉了那个判断
-- 契约精度精简：签名 + 调用形状；副作用与错误行为只在有状态/会失败时写
-- `dev/SKILL.md` 15.7 KB → 8.9 KB，细节进 `references/`
-- 新增 `tests/skill-check.sh`：字节上限、引用完整、旧概念残留、frontmatter
+- **入口按顺序判断**：修 bug / 直接做 / 大需求探路 / 几件独立事拆包 / brief；「直接做」与大需求是入口结果，不是文档档位——文档只有一页纸与完整两档，八节、三道门与开发纪律不随档位缩放
+- **访谈选边为固定整轮**：一轮提出当前 frontier 的全部问题（不依赖其他未答问题），不设 3-6 数量上限（上游明确拒绝上限，原 4.0.0 的加法是误借）；每轮只回述新增或改变的决定，最后一轮完整回述共识
+- **单一真值回归**：`intake.md` 只负责看清、入口与定档，删去从 grilling 复制的 5 处提问纪律；`grilling/SKILL.md` 恢复为访谈唯一真值
+- **新增方案对比**：写 brief 前单独一条消息，用户选定实现路线（采纳 superpowers brainstorming 的 lay-out-the-approaches）
+- **知识沉淀恢复显式触发**：访谈全程执行 `domain-docs`（3.x 有、4.0.0 静默丢失、本次连同账目一起登记）；门 1 呈报增加「本次沉淀」对账，ADR 门 1 批准后落盘
+- 账目修正：`analysis/04` 撤回「3-6 上限来自上游」的错误归属，记为账目首起「新增行未核对来源」事故
 
-已做两次端到端实证（空项目 + 空仓库，Node 24）。耗时分布显示：门 0→门 1 占 20m47s，门 2 只占 2m59s——时间花在需求上，后面就快。
-
-下一步：打 v4.0.0 tag → 重装全局验证安装链路。
-
+下一步：下一个真实项目实证新入口（观察整轮访谈的回述是否被用户有效使用、方案对比是否不漏）；`17-pending-fixes.md` 问题 2 的 ADR 七类自检清单待评估。
 ## 已完成
 
+- 2026-11-03 09:55 发布 v4.1.0(起点 v4.0.0):内容为 2026-11-03 三轮修订——需求收集再定稿、spec/任务契约构成扩充与门 2 切片 quiz、编码阶段接口预检/命令 Expected/隐含高风险输入测试映射;package.json 4.0.0 → 4.1.0,两份 README 安装 ref 同步 @v4.1.0;tag 沿用附注约定
+- 2026-11-03 04:02 需求收集再定稿:重划阶段 0 至门 1——入口按「修 bug / 直接做 / 大需求 / 拆包 / brief」顺序判断,文档只余一页纸与完整两档;访谈固定整轮、废止 3-6 上限,每轮短回述、末轮完整回述;新增方案对比(单独一条消息选定路线);intake 退回指针式(访谈纪律唯一真值回归 grilling);恢复访谈全程执行 domain-docs 的显式触发,门 1 呈报加「本次沉淀」,ADR 门 1 后落盘;CONTEXT.md 增「回述」「方案对比」词条;`analysis/04` 修正 3-6 上限的错误归属;`17-pending-fixes.md` 问题 1 按本方案修复、问题 3 随两道术语判据一并解决
+- 2026-11-02 02:38 v4.0.0 收尾修正:修 `dev-resume` 一处批量改名误伤（「**非目标**机械地」应为「**不要**机械地」，原句语义被改反）；两份 README 安装 ref 由 `@v3.3.0` 补到 `@v4.0.0`；ROADMAP 当前阶段由「待发 v4.0.0」改为已发版
 - 2026-11-01 **工作流重设计**（设计定稿 `../analysis/16-workflow-redesign.md`，讨论与实证 `../analysis/15-workflow-redesign-discussion.md`）:
   - **入口从分类改为判断**:删轻/重/巨三档与 classifier;新增 `dev/references/intake.md`(先看 → 两个判断 → 分析四件事 → 一轮 3-6 个 → 定大小);修 bug 分流到 `debugging`,不写需求文档
   - **四层文档**:`brief.md`(门 1,冻结)/ `plan.md` + `spec.md` + `tasks/T<n>.md`(门 2);新增 `brief-template.md`、`slice.md`、`tech-spec-template.md`、`task-spec-template.md`;删除 `design-template.md`、`spec-template.md`、`plan-template.md`、`design-checklist.md`
@@ -134,7 +132,6 @@
 - 2026-10-13 10:33 发布 v3.3.0(起点 v3.2.3):内容即上方 DESIGN.md 支持条目;实项目首验(pi-notes 便签板,77 用例全过)见「最近验证」,婉拒留痕与静默行两分支待补测;安装 ref 同步根 README 与 devflow/README(@v3.2.1 → @v3.3.0);tag 沿用附注约定
 
 ## 进行中
-
 无。
 
 ## 待办
@@ -152,6 +149,9 @@
 
 ## 最近验证
 
+- 2026-11-03 09:55 v4.1.0 发版前核查:对三轮修订改动做 `devflow/tests/skill-check.sh` 全项 PASS(含 dev/SKILL.md 10,369 字节 < 20,000 阈值)、`context-meter.test.mjs` 全部通过(读数不可用/除零防护/窗口变化行为)、`git diff --check` 干净;安装 ref 与 package.json 版本号核对一致;不纳入提交的 `.pi/` 本地配置与临时文件已剔除。人工核对通过
+- 2026-11-03 07:32 编码实现与测试执行补强：阶段 4 首任务前做任务间接口预检并将结果写入 plan；任务契约命令步骤要求 `Expected:`，implementer 对照每条命令输出，controller 核对其证据并重跑最终验证；覆盖标准明确把隐含高风险输入映射到具体用例。同步 dev / TDD / implementer prompt / task-spec / tech-spec / self-check、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，交叉引用与新规则命中完整；未运行测试（文档改动）。
+- 2026-11-03 07:01 完成 spec/task-spec 与切片规范扩充：`spec.md` 取消篇幅上限并将整体实现、按需流程图置前，模块划分写路径；任务契约将实现方式与按需流程图置前，接口节写文件落点，可选任务局部数据结构；门 2 quiz 检查粒度、硬依赖、合并/拆分，`挡谁：无` 明确代表无下游依赖。更新模板、dev skill、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，旧的一页半限制和错误「可立即开始」标记在现行文档中无残留；未运行测试（文档变更）。
 - 2026-10-13 08:04 DESIGN.md 支持 pi-notes(便签板)实项目首验:重流程全程走通(门 1→门 2→3 任务→门 3,9 commit)。契约核对——design.md 约束节按模板引用式写法(「遵循 DESIGN.md(项目根);本次例外:无」);DESIGN.md 随首任务起草,token 结构完整(colors/typography/rounded/spacing/components + 引用语法);视觉约束经 plan.md 全局约束逐字传递;视觉起草与样式按 TDD waiver 预登记走门 3 目测替代验收;style.css 以 CSS 变量落地 token 并注释来源;AGENTS.md 工程边界入「遵循 DESIGN.md,不硬编码色值」。controller 亲验 `npm test` 77 用例全过。未测分支:婉拒留痕与 AGENTS.md 静默行(本次直接走接受路径),待补测
 - 2026-10-13 03:33 本次改动核查:DESIGN.md 相关改动 grep 全仓复查,落点仅 3 文件(`dev/SKILL.md` 阶段 1 / `design-template.md` 技术栈与依赖约束节 / ROADMAP 登记行),无其他散落提及;感知段「写法见模板」与模板引用句口径互恰(引用不复述 token、婉拒留痕临时依据措辞一致);ROADMAP 新条目落位于已完成节末尾(09-23 条目后、进行中前),子项缩进与列表结构完好。人工核对通过
 

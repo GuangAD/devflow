@@ -14,7 +14,7 @@
 | `grilling` | `grilling` | design tree、round、frontier 批量提问、每题附推荐答案、事实/决策分工、frontier 空即共识 | 访谈覆盖范围绑定设计文档章节 | 无仓库场景的 grill-me 变体 |
 | `domain-docs` | `domain-modeling` | 五会话动作、纯词汇表、ADR 三条件、就地更新 | 取代协议明确成文 | 多上下文 CONTEXT-MAP |
 | `tdd` seam 纪律 | `tdd`+`to-spec` | 预约定 seam、三反模式 | seam 确认移入门 1 设计文档 | — |
-| tracer-bullet(曳光弹)计划 | `to-tickets` | 四切片规则、prefactoring、依赖声明 | 盘问三连→门 2 修订循环;DAG→线性依赖 | expand–contract 宽重构协议 |
+| tracer-bullet(曳光弹)计划 | `to-tickets` | 四切片规则、prefactoring、依赖声明 | 依赖盘问三问（粒度/硬依赖/合并拆分）→门 2 quiz;DAG→线性依赖；上游 Blocked by 改写为 devflow 出向「挡谁」，无下游显式写「无」 | expand–contract 宽重构协议 |
 | `debugging` | `diagnosing-bugs` | 回路先行、复现率优先、可证伪假设、回归测试先于修复、"无 seam 是发现"、三次失败=架构、DBG- 前缀、根因进 commit | 六阶段→四步;10 种回路手段→3 类 | HITL 人肉回路脚本 |
 | `dev-review` | `improve-codebase-architecture` | 热点定范围、摩擦信号、删除测试、调查不抢救、强度徽章、ADR 冲突标注 | HTML 报告→Markdown;选中后路由进 /dev | Tailwind/Mermaid 可视化 |
 | classifier | `ask-matt` | 路由思想 | 全地图路由→信号清单+问一句 | 独立路由技能形态 |
@@ -94,4 +94,28 @@
 - 四层文档的划分轴
 - `tests/skill-check.sh` 静态检查
 
-**来源表新增一行**：一轮 3-6 个问题上限、实现决定标「我的判断」、比例检查、先定文件结构，均来自上游 2026-10 之后的新版本（superpowers v7 / skills 1.3），非原蒸馏时的版本。
+**来源表新增一行**：实现决定标「我的判断」、比例检查、先定文件结构，均来自上游 2026-10 之后的新版本（superpowers v7 / skills 1.3），非原蒸馏时的版本。⚠️ 原误记「一轮 3-6 个问题上限」也出自本行——2026-11-03 核对上游 `skills` 明确把问题数量上限列为 out-of-scope（`.out-of-scope/question-limits.md`），3-6 上限系本项目自加并已废止；此系本账目首次记录的「新增行未核对来源」事故。
+
+**2026-11-03 需求收集再定稿**（设计定稿见 `16-workflow-redesign.md` 第十二节）：
+
+- 阶段 0 入口按「看清 → 修 bug / 直接做 / 大需求探路 / 拆包 / brief」顺序判断；文档只有一页纸与完整两档，直接做与大需求不是文档档位。
+- `intake.md` 只负责看清、入口与档位，删去从 `grilling` 复制的提问纪律；`grilling` 恢复为访谈唯一真值，固定整轮、不设数量上限、每轮短回述。
+- 方案对比（单独一条消息、用户选定实现路线）采纳自 superpowers `brainstorming` 的 lay-out-the-approaches；每轮回述采纳自其 play-it-back，但改为只写本轮变化。
+- 恢复 3.x 已登记过的「访谈全程执行 domain-docs」显式触发（原账目第五节④「`grill-with-docs`→ dev 阶段 1 内置组合」），门 1 增加「本次沉淀」对账，ADR 在门 1 批准后落盘。4.0.0 重写时此触发被静默删除且账目未登记，本次连同登记。
+
+
+**2026-11-03 规格与切片补充**（设计定稿见 `16-workflow-redesign.md` 第十三节）：
+
+- `spec.md` 取消一页半限制，整体实现与按需流程图前置；数据结构、含模块路径的职责划分、覆盖标准、接口清单共同构成整体规划。
+- 任务契约在接口之前新增本模块实现方式与按需流程图，接口节写文件落点，可选地描述任务局部数据结构；模块级结构由 spec 定义。
+- 门 2 quiz 纳入 to-tickets 的粒度、依赖和合并/拆分三问；切片检查以用例能否跑绿辨硬依赖。
+- plan 的「挡谁」是出向依赖，空值显式写「无」；不能把它误读成 `Blocked by` 或「能否立即开始」。
+
+
+**2026-11-03 编码实现与测试执行补强**（落地见 `16-workflow-redesign.md` 第十四节）：
+
+| 采纳点 | 来源 | devflow 改写 |
+|---|---|---|
+| 开工前接口预检 | Superpowers `subagent-driven-development` preflight | T1 前核对跨任务生产/消费接口与 spec 的形状，记录在 plan 开发记录 |
+| 命令步骤的预期结果 | Superpowers `writing-plans` / `executing-plans` | 每个运行命令都写 `Expected:`，implementer 和 controller 按实际输出核对 |
+| 未明说的高风险输入 | Superpowers `writing-plans` Review Focus | 并入 spec 覆盖标准，逐项映射到现有任务用例，不另建风险清单 |

@@ -3,6 +3,7 @@
 > 来源：工作流重设计后的两次端到端实测 + 一轮关于「参考 skills 还是 superpowers」的定位讨论。
 > 设计定稿见 [16-workflow-redesign.md](16-workflow-redesign.md)，讨论过程见 [15-workflow-redesign-discussion.md](15-workflow-redesign-discussion.md)。
 > **本文只列待修项**，修完即可删除或并入 16。
+> **2026-11-03 处置状态**：问题 1 与问题 3 已按 `16-workflow-redesign.md` 第十二节的方案修复（触发点恢复为 intake 指针 + 门 1「本次沉淀」对账；术语两道判据落进 `domain-docs`；文中 ①② 两处建议的具体写法未采用，原因是把 domain-docs 的纪律再抄一份会制造漂移——纪律留在唯一真值，intake 只留指针）。问题 2（ADR 判据太抽象）仍待评估：七类清单未加入，理由是该清单容易诱发「为写 ADR 而写 ADR」，且 builder check 同样被本次定稿否决，需用本仓库现有 6 条 ADR 回测试纸后再定。
 
 ## 先看工作区状态
 

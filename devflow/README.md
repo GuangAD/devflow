@@ -3,19 +3,19 @@
 由 mattpocock/skills 与 obra/superpowers 蒸馏而成的个人 AI 编码工作流。
 设计定稿见 `../analysis/16-workflow-redesign.md`(2026-11-01 重设计);更早的 `analysis/03` 已被它取代。
 
-**一句话**:一个 `/dev` 命令走天下——接到需求先看再判,能直接做就直接做;要设计就写需求文档(门 1),切完片、写完技术规格与全部任务契约再停一次(门 2),然后逐任务自治开发,最后门 3 验收。三道门守方向/路径/结果,门之间 agent 自治,一切状态落盘在 git 里的文档中。
+**一句话**：一个 `/dev` 命令走天下——接到需求先看清再按序判断入口（修 bug / 直接做 / 大需求 / 拆包 / brief），能直接做就直接做；要写文档就整轮访谈、方案对比后写 brief（门 1），切完片、写完技术规格与全部任务契约再停一次（门 2），然后逐任务自治开发，最后门 3 验收。三道门守方向/路径/结果,门之间 agent 自治,一切状态落盘在 git 里的文档中。
 
 ## 结构
 
 ```
 skills/                    # 技能:工作流逻辑
 ├── dev/                   # 主入口:入口分流 + 五阶段 + 三道门 + 回退协议
-│   └── references/        #   intake(接到需求)、brief/slice/tech-spec/task-spec 四份模板、
+│   └── references/        #   intake(看清/入口/定档,访谈纪律指向 grilling)、brief/slice/tech-spec/task-spec 模板、
 │                          #   自查清单、implementer 派发模板
 ├── dev-doc/               # 知识沉淀(CONTEXT.md + ADR)
 ├── dev-resume/            # 中断恢复协议
 ├── dev-review/            # 代码库巡检
-├── grilling/              # 纪律:访谈原语(design tree/round/frontier)
+├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
 ├── domain-docs/           # 纪律:词汇表 + ADR 维护
 ├── tdd/                   # 纪律:红绿循环 + waiver allowlist
 ├── code-review/           # 纪律:subagent 评审 + 分级处置
@@ -41,7 +41,7 @@ tests/
 **首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-pi install git:github.com/GuangAD/devflow@v3.3.0   # 全局,锚定 ref
+pi install git:github.com/GuangAD/devflow@v4.1.0   # 全局,锚定 ref
 pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
 pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
@@ -67,10 +67,10 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ### 你会出现的三个点
 
 1. **门 1**:确认需求文档 `brief.md`——目标 · 非目标 · 失败形态、选定方案、关键决策（你定的与我定的）、未定项
-2. **门 2**:确认 `plan.md`(切几件、什么顺序)+ `spec.md`(数据结构/模块/覆盖标准/接缝清单)+ 全部任务契约。**三个文件此时已写好在磁盘上**,这段呈报只是索引
+2. **门 2**：确认 `plan.md`（任务与依赖）+ `spec.md`（整体实现/按需流程图/数据结构/模块路径与职责/覆盖标准/接缝清单）+ 全部任务契约（实现方式/按需流程图/文件落点/数据结构/步骤/用例）。这些文件此时已写好在磁盘上，这段呈报只是索引
 3. **门 3**:验收最终报告——逐项验收、评审记录、waiver 清单、提交列表、遗留事项、**我替你做过的判断**
 
-门之间的开发阶段 agent 自治:按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 自己重跑验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
+门之间的开发阶段 agent 自治:T1 开始前先做任务间接口预检并记入 plan;之后按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 自己重跑验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
 
 **门必须真的停下**:2026-11-01 实测,只发通知不停顿,几十个工具调用会把通知淹没,agent 一路跑到门 3。
 
@@ -96,7 +96,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 | 决策 | 选择 | 理由 |
 |---|---|---|
 | 触发方式 | 命令启动,无自动注入;扩展只注册一个按需调用的只读工具 | 个人使用,拒绝过程感重的自动接管;状态落盘使常驻注入不再必要。**不注入也顺带保住了 prompt cache 的前缀** |
-| 入口分流 | 先看再判:做事 / 修东西 / 复述不出来;最后才定产出多长 | 分类发生在理解之前等于猜。「直接做」是判断的结果,不是输入 |
+| 入口分流 | 看清后按序判断:修 bug / 直接做 / 大需求 / 拆包 / brief;文档只有一页纸与完整两档 | 分类发生在理解之前等于猜。「直接做」是入口结果,不是文档档位;八节、三道门与开发纪律不随档位缩放 |
 | 执行引擎 | 会话内控制 + subagent 实现 + subagent 评审 | 评审独立性必须保住;实现派给 subagent 是为隔离工作记忆。无 subagent 时退回会话内实现 + 按需切换 |
 | TDD | 默认制 + waiver allowlist 留痕 | 亲眼看红是核心;纯配置/文案 waiver 防磨人 |
 | 门密度 | 三道:门 1 批需求、门 2 批切片与契约、门 3 验收 | 人在决策处出现,在执行处消失。门 2 曾被砍掉一次,2026-11-01 实测证明切片与契约是判断而非机械分解,已恢复 |
@@ -120,9 +120,9 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 | 解锁集 | ready set | 硬依赖已完成的待做任务集 |
 | 需求文档 | brief | 阶段 1 产出,门 1 批准后冻结 |
 | 切片 | slice / plan | 阶段 2 产出,不含签名与用例 |
-| 技术规格 | spec | 整体骨架,上限一页半 |
-| 任务契约 | task spec | 一个任务一份:伪代码 + 步骤 + 用例 |
-| 覆盖标准 | coverage standard | 分完整档与抽样档,每行要指到具体用例 |
+| 技术规格 | spec | 整体实现 + 按需流程图 + 数据结构 + 模块路径与职责 + 覆盖标准 + 接口清单，不设篇幅上限 |
+| 任务契约 | task spec | 一个任务一份:实现方式 + 按需流程图 + 接口/文件落点 + 数据结构 + 含 Expected 的命令步骤 + 用例 |
+| 覆盖标准 | coverage standard | 分完整档与抽样档；隐含高风险输入也须逐项映射到具体用例 |
 | 大需求 | unclear request | 复述不出来的需求,先定终点再一次解一件 |
 | 控制器 | controller | 指 dev 主流程所在的会话 |
 | 实现者 | implementer | 承接实现任务的 subagent |

@@ -11,21 +11,21 @@ description: 主开发工作流入口(dev workflow):接到需求(intake) → 需
 
 ## 阶段 0:接到需求
 
-收到请求,先回答两个问题,再决定走哪条路。
+读 [references/intake.md](references/intake.md) 执行：先看清（读需求、读代码、读约定、查事实），再按顺序判断入口，最后才定 brief 档位。入口是判断的结果，不是任务大小的标签。
 
-| 问题 | 答案 | 走 |
-|---|---|---|
-| 有东西坏了,还是要有新东西 | 坏了 | 读 `debugging`,走复现—根因—回归测试。**不写需求文档** |
-| 我能用两三句话说清他要什么吗 | 说不清 | 大需求:先定终点,一次解一件,只产决定不产代码 |
-| 说清了 | — | 下面的五阶段 |
+| 判断结果 | 走 |
+|---|---|
+| 有东西坏了 | 读 `debugging`，走复现—根因—回归测试。**不写需求文档** |
+| 行为、边界、完成标准都已明确 | 直接做，跳过后续全部文档，做完汇报假设与验证 |
+| 需求边界未成形 | 大需求探路：先定终点，一次解一件，只产决定不产代码 |
+| 几件独立的事 | 拆开排序，逐件重新判断，不混进同一份 brief |
+| 进入 brief 路径 | 读 `grilling` 整轮访谈 → 方案对比 → 阶段 1 |
 
-判据不看任务大小,只看性质与信息状态。读 [references/intake.md](references/intake.md) 执行:先看(读需求、读代码、读约定、查事实),再判,再分析,再提问,最后定大小。
-
-**没缺口就不提问**:文档已写全且与代码现实对得上 → 直接说「我看明白了,这就去做」,跳过后续全部文档。
+进入 brief 路径后只有**一页纸 / 完整**两档。两档的八节结构、三道门与后续开发纪律相同，只有展开度不同。访谈与方案对比按 `intake.md` 的指针执行；发现完整档信号就停下升档。
 
 ## 阶段 1:需求文档 + 门 1
 
-按 [references/brief-template.md](references/brief-template.md) 写 `docs/plans/<YYYY-MM-DD>-<slug>/brief.md`。规模按 intake 的判断(直接做 / 一页纸 / 完整设计)。
+按 [references/brief-template.md](references/brief-template.md) 写 `docs/plans/<YYYY-MM-DD>-<slug>/brief.md`，档位按 intake 的复核结果（一页纸 / 完整）。brief 只记录访谈与方案对比已经决定的内容，不产生新决策。
 
 ### 门 1
 
@@ -33,7 +33,7 @@ description: 主开发工作流入口(dev workflow):接到需求(intake) → 需
 
 **此门前一行代码都不写**,包括搭架子、装依赖、建目录。看和查可以。
 
-**批准后立即提交 `brief.md`。** 之后它冻结:开发期发现方案错误走回退协议,不就地修改。
+**门 1 批准的 ADR 此时落盘，随后立即提交 `brief.md` 与这些 ADR。** 之后 brief 冻结：开发期发现方案错误走回退协议，不就地修改。
 
 ## 阶段 2:切片
 
@@ -43,29 +43,30 @@ description: 主开发工作流入口(dev workflow):接到需求(intake) → 需
 
 ## 阶段 3:技术规格与任务契约
 
-**技术规格**:按 [references/tech-spec-template.md](references/tech-spec-template.md) 写 `spec.md`——数据结构、模块划分、技术选型、覆盖标准、接口面清单。上限一页半。
+**技术规格**:按 [references/tech-spec-template.md](references/tech-spec-template.md) 写 `spec.md`——整体实现、按需流程图、数据结构、带模块路径的模块划分、技术选型、覆盖标准、接口面清单。不设篇幅上限。
 
-**任务契约**:按 [references/task-spec-template.md](references/task-spec-template.md) 为每个任务写 `tasks/T<n>.md`——接口伪代码、开发步骤、测试规格。伪代码只写调用形状,不写算法。
+**任务契约**:按 [references/task-spec-template.md](references/task-spec-template.md) 为每个任务写 `tasks/T<n>.md`——实现方式、按需流程图、接口伪代码与文件落点、可选数据结构、开发步骤、测试规格。实现方式描述本任务模块的逻辑处理方式；伪代码只写调用形状，不写算法。
 
 全部写完后跑 [references/self-check.md](references/self-check.md) 的十条自查,就地修完,然后呈报门 2。
 
 ### 门 2
 
-按 [references/self-check.md](references/self-check.md) 的「门 2 呈报」执行:任务清单与依赖、每个任务的接缝与用例条数、覆盖标准的档位、十条自查结果,加三个问题,**停下等一句确认**。
+按 [references/self-check.md](references/self-check.md) 的「门 2 呈报」执行:任务清单与依赖、每个任务的接缝与用例条数、覆盖标准的档位、十条自查结果，加五个问题,**停下等一句确认**。
 
 **批准后立即提交 `plan.md`、`spec.md` 与 `tasks/`。** 此门之后不再停顿,直到门 3。
 
-一道门只在这一处:切片与契约是判断(切几件、接缝开在哪、用例够不够),不是机械分解。只给清单看不出对不对,得连每个任务测什么一起给。
+一道门只在这一处:切片与契约是判断(切几件、任务粒度与依赖是否合理、接缝开在哪、用例够不够),不是机械分解。只给清单看不出对不对,得连每个任务测什么一起给。
 
 ## 阶段 4:逐任务开发(自治,任务间不停顿)
 
+**开始 T1 前做一次任务间接口预检**，再记录 BASE。逐个核对任务契约中跨任务生产/消费的接口：生产方与消费方的名称、签名、数据形状及其和 `spec.md` 定义是否一致；同时核对文件落点归属。将结果记入 `plan.md`「开发记录」的「开工前接口预检」块；没有共享接口时写「无共享接口」。发现契约间不一致，先按回退协议修订并复检；若涉及 `brief` 的方向或行为，则回门 1。
 任务顺序由依赖决定。每个任务按序走:
 
 1. 记录 `BASE=$(git rev-parse HEAD)`。
 2. **实现**——两种形态:
    - **优先派 implementer subagent**:按 [references/implementer-prompt.md](references/implementer-prompt.md) 填简报派发。要求实现留在工作区、**不提交**、不改四层文档、发现契约缺口即停手报告。
    - **fallback 会话内实现**:读 `tdd` 技能,按任务契约的测试规格逐条写失败测试 → 亲眼看红 → 最小实现 → 看绿。waiver 需留痕。
-3. 读 `verification`:**自己重跑验证**。subagent 回报的测试结果不算数。把它声称的改动清单与 `git status` 实况逐项核对,并对照契约里「涉及」的文件数——多出来的就是越界。不符即整体降信。
+3. 读 `verification`:**自己重跑验证**。核对 implementer 报告中每个命令步骤的实际结果是否符合契约 `Expected:`，并亲自重跑最终验证命令、对照其预期；subagent 回报的结果本身不算验证证据。把它声称的改动清单与 `git status` 实况逐项核对,并对照契约里「涉及」的文件数——多出来的就是越界。不符即整体降信。
 4. 读 `code-review`:按其方法派 subagent 评审本任务 diff(无 subagent 时按其 fallback 做 self-review 并标注「非独立」)。简报的规格来源是 `tasks/T<n>.md` + `spec.md` 的覆盖标准与接口清单。
 5. 处置发现:**Critical 或方案性偏离计划 → 暂停询问用户**;Important 修完继续并重跑覆盖测试;Minor 记入开发记录。同一发现两轮修复不过 → 升级为用户决策。
 6. 提交:commit message 引用任务号。
@@ -108,7 +109,7 @@ description: 主开发工作流入口(dev workflow):接到需求(intake) → 需
    - 遗留事项(记录在案的 Minor)
    - **我替你做过的判断**(第 5 节所有 `[我]` 项 + 实施期自己拍板的处置)
 4. **门 3**:停下等确认。报告只报状态,不下「全部通过」的总结论——有些验收项根本没验过。
-5. 收尾:清 `.review/` 目录、写收尾总结(本次沉淀的 `CONTEXT.md` 词条与 ADR 清单)、处理开发记录(过长时折叠为摘要并注明完整记录见 git 历史)、提交。
+5. 收尾:清 `.review/` 目录、写收尾总结（**对账**本次已写入的 `CONTEXT.md` 词条与 ADR，清单与文件实况不符先补齐说明）、处理开发记录(过长时折叠为摘要并注明完整记录见 git 历史)、提交。
 
 ## 回退协议
 
