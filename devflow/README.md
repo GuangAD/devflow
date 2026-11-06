@@ -13,7 +13,7 @@ skills/                    # 技能:工作流逻辑
 │   └── references/        #   intake(看清/入口/定档,访谈纪律指向 grilling)、brief/slice/tech-spec/task-spec 模板、
 │                          #   自查清单、implementer 派发模板
 ├── dev-doc/               # 知识沉淀(CONTEXT.md + ADR)
-├── dev-resume/            # 中断恢复协议
+├── dev-resume/            # 中断恢复协议(含 T1 前预检状态判定)
 ├── dev-review/            # 代码库巡检
 ├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
 ├── domain-docs/           # 纪律:词汇表 + ADR 维护
@@ -41,7 +41,7 @@ tests/
 **首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-pi install git:github.com/GuangAD/devflow@v4.1.0   # 全局,锚定 ref
+pi install git:github.com/GuangAD/devflow@v4.1.1   # 全局,锚定 ref
 pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
 pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
@@ -70,7 +70,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 2. **门 2**：确认 `plan.md`（任务与依赖）+ `spec.md`（整体实现/按需流程图/数据结构/模块路径与职责/覆盖标准/接缝清单）+ 全部任务契约（实现方式/按需流程图/文件落点/数据结构/步骤/用例）。这些文件此时已写好在磁盘上，这段呈报只是索引
 3. **门 3**:验收最终报告——逐项验收、评审记录、waiver 清单、提交列表、遗留事项、**我替你做过的判断**
 
-门之间的开发阶段 agent 自治:T1 开始前先做任务间接口预检并记入 plan;之后按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 自己重跑验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
+门之间的开发阶段 agent 自治:T1 开始前先做任务间接口与测试命令预检并记入 plan;之后按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 自己重跑验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
 
 **门必须真的停下**:2026-11-01 实测,只发通知不停顿,几十个工具调用会把通知淹没,agent 一路跑到门 3。
 
@@ -121,8 +121,12 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 | 需求文档 | brief | 阶段 1 产出,门 1 批准后冻结 |
 | 切片 | slice / plan | 阶段 2 产出,不含签名与用例 |
 | 技术规格 | spec | 整体实现 + 按需流程图 + 数据结构 + 模块路径与职责 + 覆盖标准 + 接口清单，不设篇幅上限 |
-| 任务契约 | task spec | 一个任务一份:实现方式 + 按需流程图 + 接口/文件落点 + 数据结构 + 含 Expected 的命令步骤 + 用例 |
-| 覆盖标准 | coverage standard | 分完整档与抽样档；隐含高风险输入也须逐项映射到具体用例 |
+| 任务契约 | task spec | 一个任务一份:实现方式 + 按需流程图 + 接口/文件落点 + 数据结构 + 含 Expected 与跑测条数的命令步骤 + 用例 |
+| 覆盖标准 | coverage standard | 分完整档与抽样档；每行须标「主测接缝」与「落在哪」；隐含高风险输入也须逐项映射到具体用例 |
+| 主测接缝 | primary seam | 覆盖矩阵中每条行为的主测位置：模块行为在函数级，跨模块流程在 HTTP 层 |
+| 模块行为测试 | module behavior test | 穷举输入组合与边界的测试，主测在函数级接缝 |
+| 特性流程测试 | feature flow test | 验证跨模块接线、状态变化和用户流程的测试，主测在 HTTP 接缝 |
+| 跑测条数 | executed test count | 命令实际执行的用例数；过滤 / 指定用例命令为 0 即未验证，不算通过 |
 | 大需求 | unclear request | 复述不出来的需求,先定终点再一次解一件 |
 | 控制器 | controller | 指 dev 主流程所在的会话 |
 | 实现者 | implementer | 承接实现任务的 subagent |

@@ -1,7 +1,7 @@
 # ROADMAP
 
 ## 当前阶段
-**2026-11-03 工作流规格与执行补强**（已随 v4.1.0 发布）。第一轮需求收集修订见 `../analysis/16-workflow-redesign.md` 第十二节；spec / task-spec 构成与切片 quiz 见第十三节；编码阶段接口预检、命令预期与高风险输入测试映射见第十四节。
+**2026-11-04 测试职责分层、命令粒度、检查点与恢复协议补强**（已随 v4.1.1 发布）。前三轮见 `../analysis/16-workflow-redesign.md` 第十二至十四节；本轮见第十五节。
 
 核心变化：
 
@@ -15,7 +15,11 @@
 下一步：下一个真实项目实证新入口（观察整轮访谈的回述是否被用户有效使用、方案对比是否不漏）；`17-pending-fixes.md` 问题 2 的 ADR 七类自检清单待评估。
 ## 已完成
 
-- 2026-11-03 09:55 发布 v4.1.0(起点 v4.0.0):内容为 2026-11-03 三轮修订——需求收集再定稿、spec/任务契约构成扩充与门 2 切片 quiz、编码阶段接口预检/命令 Expected/隐含高风险输入测试映射;package.json 4.0.0 → 4.1.0,两份 README 安装 ref 同步 @v4.1.0;tag 沿用附注约定
+- 2026-11-06 13:28 发布 v4.1.1(起点 v4.1.0):内容为 11-04 测试职责分层/命令粒度/检查点/恢复协议补强——主测接缝与跨接缝重复自查、Expected 跑测条数与 self-check 2.1、终审接缝导航包、dev-resume 恢复协议同步;package.json 4.1.0 → 4.1.1,两份 README 安装 ref 同步 @v4.1.1;tag 沿用附注约定
+- 2026-11-04 17:48 修复 dev-resume 与阶段 4 一次性预检不同步：第二步读 plan 时判定「开工前接口预检」是否已有结果，并允许预检未完成时读全部契约；第四步 a 在恢复发生在 T1 前时先执行一次性预检（含 self-check 2.1 的测试命令可解析），再进任务循环；纪律段明确已有结果不重做。同步 devflow/README 结构树、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。
+- 2026-11-04 16:48 补测试命令检查点：`Expected:` 必须写跑测条数、0 条不算通过；tdd 与 implementer 同步核对与报告义务；self-check 新增 2.1 测试命令可解析；T1 前接口预检扩展测试基座与跨任务命名核对。同步 task-spec / tdd / self-check / dev / slice / implementer、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。
+- 2026-11-04 15:39 完成测试职责分层与命令粒度优化：覆盖标准加「主测接缝」与跨接缝重复自查；红绿循环跑目标用例、任务收尾跑相关模块；整特性终审改为接缝导航包，完整 diff 保留可查。同步 tech-spec/task-spec/tdd/implementer/self-check、dev、code-review、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。
+- 2026-11-03 17:55 发布 v4.1.0(起点 v4.0.0):内容为 2026-11-03 三轮修订——需求收集再定稿、spec/任务契约构成扩充与门 2 切片 quiz、编码阶段接口预检/命令 Expected/隐含高风险输入测试映射;package.json 4.0.0 → 4.1.0,两份 README 安装 ref 同步 @v4.1.0;tag 沿用附注约定
 - 2026-11-03 04:02 需求收集再定稿:重划阶段 0 至门 1——入口按「修 bug / 直接做 / 大需求 / 拆包 / brief」顺序判断,文档只余一页纸与完整两档;访谈固定整轮、废止 3-6 上限,每轮短回述、末轮完整回述;新增方案对比(单独一条消息选定路线);intake 退回指针式(访谈纪律唯一真值回归 grilling);恢复访谈全程执行 domain-docs 的显式触发,门 1 呈报加「本次沉淀」,ADR 门 1 后落盘;CONTEXT.md 增「回述」「方案对比」词条;`analysis/04` 修正 3-6 上限的错误归属;`17-pending-fixes.md` 问题 1 按本方案修复、问题 3 随两道术语判据一并解决
 - 2026-11-02 02:38 v4.0.0 收尾修正:修 `dev-resume` 一处批量改名误伤（「**非目标**机械地」应为「**不要**机械地」，原句语义被改反）；两份 README 安装 ref 由 `@v3.3.0` 补到 `@v4.0.0`；ROADMAP 当前阶段由「待发 v4.0.0」改为已发版
 - 2026-11-01 **工作流重设计**（设计定稿 `../analysis/16-workflow-redesign.md`，讨论与实证 `../analysis/15-workflow-redesign-discussion.md`）:
@@ -149,9 +153,13 @@
 
 ## 最近验证
 
-- 2026-11-03 09:55 v4.1.0 发版前核查:对三轮修订改动做 `devflow/tests/skill-check.sh` 全项 PASS(含 dev/SKILL.md 10,369 字节 < 20,000 阈值)、`context-meter.test.mjs` 全部通过(读数不可用/除零防护/窗口变化行为)、`git diff --check` 干净;安装 ref 与 package.json 版本号核对一致;不纳入提交的 `.pi/` 本地配置与临时文件已剔除。人工核对通过
-- 2026-11-03 07:32 编码实现与测试执行补强：阶段 4 首任务前做任务间接口预检并将结果写入 plan；任务契约命令步骤要求 `Expected:`，implementer 对照每条命令输出，controller 核对其证据并重跑最终验证；覆盖标准明确把隐含高风险输入映射到具体用例。同步 dev / TDD / implementer prompt / task-spec / tech-spec / self-check、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，交叉引用与新规则命中完整；未运行测试（文档改动）。
-- 2026-11-03 07:01 完成 spec/task-spec 与切片规范扩充：`spec.md` 取消篇幅上限并将整体实现、按需流程图置前，模块划分写路径；任务契约将实现方式与按需流程图置前，接口节写文件落点，可选任务局部数据结构；门 2 quiz 检查粒度、硬依赖、合并/拆分，`挡谁：无` 明确代表无下游依赖。更新模板、dev skill、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，旧的一页半限制和错误「可立即开始」标记在现行文档中无残留；未运行测试（文档变更）。
+- 2026-11-06 13:28 v4.1.1 发版前核查:devflow/tests/skill-check.sh 全项 PASS、context-meter.test.mjs 全部通过、git diff --check 干净;package.json 与两份 README 版本引用核对一致;不纳入提交的 .pi/ 本地配置与临时文件已剔除。人工核对通过
+- 2026-11-04 17:48 dev-resume 恢复协议核对：`git diff --check` 干净，`devflow/tests/skill-check.sh` 全项 PASS；预检状态判定、读全部契约例外、第四步 a 前置预检、纪律不重做四处互相引用一致；与 `dev/SKILL.md` 阶段 4 开头及 `self-check 2.1` 口径对齐。人工核对通过。
+- 2026-11-04 16:48 测试命令检查点核对：`git diff --check` 干净，`devflow/tests/skill-check.sh` 全项 PASS；跑测条数规则在模板、TDD、implementer 报告、controller 处置速查、自查 2.1 与 T1 前预检中交叉引用完整；模板 12 步示例已全部改为具体命令 + 条数。人工核对通过。
+- 2026-11-04 15:39 测试职责分层优化核对：`devflow/tests/skill-check.sh` 全项 PASS（dev/SKILL.md 10,372 字节 < 20,000 阈值）、`git diff --check` 干净；主测接缝/命令粒度/终审导航三类规则在模板、技能、主流程、术语表、分析账目与 ROADMAP 中交叉引用完整；抽样档与矩阵口径已统一。人工核对通过。
+- 2026-11-03 17:55 v4.1.0 发版前核查:对三轮修订改动做 `devflow/tests/skill-check.sh` 全项 PASS(含 dev/SKILL.md 10,369 字节 < 20,000 阈值)、`context-meter.test.mjs` 全部通过(读数不可用/除零防护/窗口变化行为)、`git diff --check` 干净;安装 ref 与 package.json 版本号核对一致;不纳入提交的 `.pi/` 本地配置与临时文件已剔除。人工核对通过
+- 2026-11-03 15:32 编码实现与测试执行补强：阶段 4 首任务前做任务间接口预检并将结果写入 plan；任务契约命令步骤要求 `Expected:`，implementer 对照每条命令输出，controller 核对其证据并重跑最终验证；覆盖标准明确把隐含高风险输入映射到具体用例。同步 dev / TDD / implementer prompt / task-spec / tech-spec / self-check、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，交叉引用与新规则命中完整；未运行测试（文档改动）。
+- 2026-11-03 15:01 完成 spec/task-spec 与切片规范扩充：`spec.md` 取消篇幅上限并将整体实现、按需流程图置前，模块划分写路径；任务契约将实现方式与按需流程图置前，接口节写文件落点，可选任务局部数据结构；门 2 quiz 检查粒度、硬依赖、合并/拆分，`挡谁：无` 明确代表无下游依赖。更新模板、dev skill、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 通过，旧的一页半限制和错误「可立即开始」标记在现行文档中无残留；未运行测试（文档变更）。
 - 2026-10-13 08:04 DESIGN.md 支持 pi-notes(便签板)实项目首验:重流程全程走通(门 1→门 2→3 任务→门 3,9 commit)。契约核对——design.md 约束节按模板引用式写法(「遵循 DESIGN.md(项目根);本次例外:无」);DESIGN.md 随首任务起草,token 结构完整(colors/typography/rounded/spacing/components + 引用语法);视觉约束经 plan.md 全局约束逐字传递;视觉起草与样式按 TDD waiver 预登记走门 3 目测替代验收;style.css 以 CSS 变量落地 token 并注释来源;AGENTS.md 工程边界入「遵循 DESIGN.md,不硬编码色值」。controller 亲验 `npm test` 77 用例全过。未测分支:婉拒留痕与 AGENTS.md 静默行(本次直接走接受路径),待补测
 - 2026-10-13 03:33 本次改动核查:DESIGN.md 相关改动 grep 全仓复查,落点仅 3 文件(`dev/SKILL.md` 阶段 1 / `design-template.md` 技术栈与依赖约束节 / ROADMAP 登记行),无其他散落提及;感知段「写法见模板」与模板引用句口径互恰(引用不复述 token、婉拒留痕临时依据措辞一致);ROADMAP 新条目落位于已完成节末尾(09-23 条目后、进行中前),子项缩进与列表结构完好。人工核对通过
 

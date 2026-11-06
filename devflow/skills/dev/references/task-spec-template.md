@@ -75,23 +75,25 @@ rank(index: SearchIndex, tokens: string[], limit: number): RankedHit[]
 
 ## 第 5 节：开发步骤
 
-每一步一个动作，结果可检查，可带文件落点。凡运行命令的步骤，写明命令和 `Expected:`；失败测试写预期失败原因，成功验证写关键结果与退出状态。
+每一步一个动作，结果可检查，可带文件落点。凡运行命令的步骤，写明命令和 `Expected:`；失败测试写预期失败原因，成功验证写关键结果与退出状态。**`Expected:` 必须写本步骤实际跑测条数**（如 pytest 的 `1 passed` / `1 failed`、unittest 的 `Ran 1 test`）；过滤或指定用例的命令不得只写 exit 0——测试运行器报告 0 条时也可能输出 OK 且退出 0，那是未验证，不是通过。
+
+**命令粒度**：红绿循环中跑目标用例（如 `pytest tests/test_csvio.py::test_invalid_age` 或 `-k` 过滤）；任务收尾跑相关模块（如 `pytest tests/test_csvio.py`）；不要在每步都跑全量 `discover`。全量测试由 controller 在任务完成时统一执行。指定用例 / `-k` 命令必须核对测试运行器报告的用例数；0 条视为未验证，不算绿。
 
 ```markdown
 ## 开发步骤
 
 1. 写测试:标题命中排第一(期望来源:手算)
-2. 运行：`<指定单测命令>`；Expected: FAIL（exit 1），原因是 `rank` 尚未实现
+2. 运行：`pytest tests/test_rank.py::test_title_hit -v`；Expected: FAIL（exit 1），`1 failed`，红因是 `rank` 尚未实现
 3. 写最小实现(落点:`搜索/rank.ts`)
-4. 运行：`<指定单测命令>`；Expected: PASS（exit 0），目标用例通过
+4. 运行：`pytest tests/test_rank.py::test_title_hit -v`；Expected: PASS（exit 0），`1 passed`，且不是 `0 passed`
 5. 写测试:两篇都含时,出现次数多的在前(期望来源:手算)
-6. 运行：`<指定单测命令>`；Expected: FAIL（exit 1），原因是出现次数排序尚未实现
+6. 运行：`pytest tests/test_rank.py::test_count_sort -v`；Expected: FAIL（exit 1），`1 failed`，红因是出现次数排序尚未实现
 7. 写最小实现(落点:`搜索/rank.ts`)
-8. 运行：`<指定单测命令>`；Expected: PASS（exit 0），目标用例通过
+8. 运行：`pytest tests/test_rank.py::test_count_sort -v`；Expected: PASS（exit 0），`1 passed`，且不是 `0 passed`
 9. 写测试:结果多于 limit 时只返回 limit 条(期望来源:brief 第 2 节)
-10. 运行：`<指定单测命令>`；Expected: FAIL（exit 1），原因是 limit 尚未应用
+10. 运行：`pytest tests/test_rank.py::test_limit -v`；Expected: FAIL（exit 1），`1 failed`，红因是 limit 尚未应用
 11. 写最小实现(落点:`搜索/rank.ts`)
-12. 运行：`<指定单测命令>`；Expected: PASS（exit 0），目标用例通过
+12. 运行：`pytest tests/test_rank.py::test_limit -v`；Expected: PASS（exit 0），`1 passed`，且不是 `0 passed`
 ```
 
 **「写测试并跑绿」是三件事，要拆成三个步骤。** 步骤的定义：实施者能从中写出唯一一件确定的事。
@@ -102,11 +104,23 @@ rank(index: SearchIndex, tokens: string[], limit: number): RankedHit[]
 
 按接缝分组。一个任务只有一个接缝时，可以省掉小标题。
 
+每组头部写一句职责说明，标明这是模块行为还是特性流程：
+
+```markdown
+### 接缝 csvio.parse_csv（模块行为）
+穷举输入组合与边界，不经过 HTTP 层。
+
+### 接缝 POST /preview（页面接线）
+只验证错误显示与确认按钮状态，不重复解析规则。
+```
+
+**职责划分的判据**：模块行为（输入组合、字段校验、边界）主测在函数级接缝；跨模块流程（状态变化、用户路径、round-trip）主测在 HTTP 接缝。同一行为在多个接缝出现时，第二层必须验证的是接线、状态或用户结果，而不是把同一规则重新测一遍。
+
 ```markdown
 ## 测试规格
 
-### 接缝 rank
-
+### 接缝 rank（模块行为）
+穷举排序输入组合与边界，不经过 HTTP 层。
 | # | 输入 | 期望 | 期望值来源 |
 |---|---|---|---|
 | 1 | 标题含关键词、正文不含 | 排第一 | 手算 |

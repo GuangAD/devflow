@@ -1,6 +1,6 @@
 {
   "name": "devflow",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "devflow — 个人开发工作流(pi 技能包):/dev 一条命令,先看再判,三道门守方向/路径/结果,门间 agent 自治;TDD/subagent 评审/证据先于声称纪律内置",
   "type": "module",
   "keywords": [

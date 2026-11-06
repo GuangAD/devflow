@@ -119,3 +119,5 @@
 | 开工前接口预检 | Superpowers `subagent-driven-development` preflight | T1 前核对跨任务生产/消费接口与 spec 的形状，记录在 plan 开发记录 |
 | 命令步骤的预期结果 | Superpowers `writing-plans` / `executing-plans` | 每个运行命令都写 `Expected:`，implementer 和 controller 按实际输出核对 |
 | 未明说的高风险输入 | Superpowers `writing-plans` Review Focus | 并入 spec 覆盖标准，逐项映射到现有任务用例，不另建风险清单 |
+
+**2026-11-04 实测复盘来源补记**（落地见 `16-workflow-redesign.md` 第十五节）：主测接缝、命令粒度、终审导航包三项均来自本次 CSV 导入器端到端实测复盘（会话 `01a1a086-3c1c-7756-b6d7-077fc2c67cde`），非外部技能借鉴。实测暴露了跨接缝重复测试、每步全量 `discover`、终审全量重读 diff 三个耗时点，本轮据此在现有流程内补规则，不新增文档层级。同轮补入的「测试命令可解析 / 跑测条数」检查点同样来自 A/B 准备阶段的契约改写核对，非外部技能借鉴。同轮修复的 `dev-resume` 与 T1 前一次性预检不同步，来源为 A/B 准备阶段的恢复适用性核对。
