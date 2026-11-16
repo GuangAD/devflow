@@ -1,7 +1,7 @@
 # ROADMAP
 
 ## 当前阶段
-**2026-11-04 测试职责分层、命令粒度、检查点与恢复协议补强**（已随 v4.1.1 发布）。前三轮见 `../analysis/16-workflow-redesign.md` 第十二至十四节；本轮见第十五节。
+**2026-11-16 context-meter 注入规则阶段编号与注释修复**（已随 v4.1.2 发布,详见「已完成」）。上一主题:**2026-11-04 测试职责分层、命令粒度、检查点与恢复协议补强**（已随 v4.1.1 发布）。前三轮见 `../analysis/16-workflow-redesign.md` 第十二至十四节；本轮见第十五节。
 
 核心变化：
 
@@ -16,6 +16,7 @@
 ## 已完成
 
 - 2026-11-06 13:28 发布 v4.1.1(起点 v4.1.0):内容为 11-04 测试职责分层/命令粒度/检查点/恢复协议补强——主测接缝与跨接缝重复自查、Expected 跑测条数与 self-check 2.1、终审接缝导航包、dev-resume 恢复协议同步;package.json 4.1.0 → 4.1.1,两份 README 安装 ref 同步 @v4.1.1;tag 沿用附注约定
+- 2026-11-16 07:57 发布 v4.1.2(起点 v4.1.1):内容为 11-16 context-meter 修复——`promptGuidelines` 写死「阶段 3」而 v4.0.0 重划后逐任务开发已是阶段 4,改为「逐任务开发阶段」按名称引用抗重编号;context-meter.ts 头注释与 README 两处「不注入任何消息」对齐为「不向消息数组注入任何内容(仅随工具声明带一条静态 guideline 进 system prompt)」。验证:`node --experimental-strip-types devflow/extensions/context-meter.test.mjs` 14 项全过、`devflow/tests/skill-check.sh` PASS。package.json 4.1.1 → 4.1.2,两份 README 安装 ref 同步 @v4.1.2。
 - 2026-11-04 17:48 修复 dev-resume 与阶段 4 一次性预检不同步：第二步读 plan 时判定「开工前接口预检」是否已有结果，并允许预检未完成时读全部契约；第四步 a 在恢复发生在 T1 前时先执行一次性预检（含 self-check 2.1 的测试命令可解析），再进任务循环；纪律段明确已有结果不重做。同步 devflow/README 结构树、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。
 - 2026-11-04 16:48 补测试命令检查点：`Expected:` 必须写跑测条数、0 条不算通过；tdd 与 implementer 同步核对与报告义务；self-check 新增 2.1 测试命令可解析；T1 前接口预检扩展测试基座与跨任务命名核对。同步 task-spec / tdd / self-check / dev / slice / implementer、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。
 - 2026-11-04 15:39 完成测试职责分层与命令粒度优化：覆盖标准加「主测接缝」与跨接缝重复自查；红绿循环跑目标用例、任务收尾跑相关模块；整特性终审改为接缝导航包，完整 diff 保留可查。同步 tech-spec/task-spec/tdd/implementer/self-check、dev、code-review、CONTEXT、README、analysis/04、analysis/16 与 ROADMAP。静态核对：`git diff --check` 与 `devflow/tests/skill-check.sh` 均通过；未运行测试（文档改动）。

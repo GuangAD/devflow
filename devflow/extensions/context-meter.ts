@@ -1,7 +1,7 @@
 /**
  * devflow context meter — 上下文占比读数(devflow 唯一的扩展)
  *
- * 形态:**注册一个只读工具,不注入任何消息**。
+ * 形态:**注册一个只读工具,不向消息数组注入任何内容**;仅随工具声明带一条静态 guideline(promptGuidelines,收进 system prompt 的 rules 段,随会话开始构建而非运行时追加,不占消息末位、不影响缓存)。
  *
  * 为什么不用 `context` 钩子注入:pi 把 prompt cache 的 message 级断点放在
  * 「最后一条 user/assistant/tool-result 文本内容」上(见 pi 文档 models.md 的
@@ -49,7 +49,7 @@ export default function devflowContextMeter(pi: ExtensionAPI) {
 			"读取当前会话的上下文占比(供 dev 工作流在任务边界判断是否需要换会话)",
 		promptSnippet: "读取当前上下文占比",
 		promptGuidelines: [
-			`在 dev 工作流的阶段 3,每个任务提交后调用 ${TOOL_NAME} 读取上下文占比;` +
+			`在 dev 工作流的逐任务开发阶段,每个任务提交后调用 ${TOOL_NAME} 读取上下文占比;` +
 				`阈值与处置见 dev 技能的「上下文预算」节。`,
 		],
 		parameters: NO_PARAMS,

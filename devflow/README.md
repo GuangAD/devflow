@@ -41,7 +41,7 @@ tests/
 **首选:pi 包方式**(仓库根 package.json 已声明 pi 清单):
 
 ```bash
-pi install git:github.com/GuangAD/devflow@v4.1.1   # 全局,锚定 ref
+pi install git:github.com/GuangAD/devflow@v4.1.2   # 全局,锚定 ref
 pi install -l git:github.com/GuangAD/devflow      # 项目级(.pi/settings.json)
 pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ```
@@ -95,7 +95,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 
 | 决策 | 选择 | 理由 |
 |---|---|---|
-| 触发方式 | 命令启动,无自动注入;扩展只注册一个按需调用的只读工具 | 个人使用,拒绝过程感重的自动接管;状态落盘使常驻注入不再必要。**不注入也顺带保住了 prompt cache 的前缀** |
+| 触发方式 | 命令启动,无消息注入;扩展只注册一个按需调用的只读工具(声明带一条静态 guideline 进 system prompt) | 个人使用,拒绝过程感重的自动接管;状态落盘使常驻注入不再必要。**不注入也顺带保住了 prompt cache 的前缀** |
 | 入口分流 | 看清后按序判断:修 bug / 直接做 / 大需求 / 拆包 / brief;文档只有一页纸与完整两档 | 分类发生在理解之前等于猜。「直接做」是入口结果,不是文档档位;八节、三道门与开发纪律不随档位缩放 |
 | 执行引擎 | 会话内控制 + subagent 实现 + subagent 评审 | 评审独立性必须保住;实现派给 subagent 是为隔离工作记忆。无 subagent 时退回会话内实现 + 按需切换 |
 | TDD | 默认制 + waiver allowlist 留痕 | 亲眼看红是核心;纯配置/文案 waiver 防磨人 |
@@ -146,7 +146,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 - 修改技能后无需重启 pi 以外的操作;技能在会话启动时重新扫描。**改完跑一轮静态检查**:`bash devflow/tests/skill-check.sh`。
 - 流程契约 = `dev/SKILL.md` + `dev/references/`(intake、四份模板、自查清单、implementer 派发)+ `code-review/references/`(评审派发 + 复审模板)+ `extensions/context-meter.ts`。改动需同步更新 `../analysis/16-workflow-redesign.md`。
 - `dev/SKILL.md` 保持在 **20,000 字节以内**——上游实证:compaction 后每个技能只重挂前 20,000 字符,超出即永久丢失。超了就把细节搬进 `references/`,SKILL.md 只留骨架。`skill-check.sh` 会拦。
-- 扩展 `extensions/context-meter.ts`:**注册一个只读工具 `context_usage`,不挂任何事件钩子、不注入任何消息**——单一职责是报数,不含任何策略。**不注入是有意的**:注入要占用消息数组末位,而 pi 把 prompt cache 的 message 级断点放在「最后一条文本内容」上,常驻读数会夺走断点、令整段历史缓存失配。数值来自 `ctx.getContextUsage()`(与 TUI footer 同源)。**零运行时依赖**——`parameters` 写字面量 + `import type`;若改成 `import { Type } from "typebox"` 取值引用,扩展会因解析不到该包而加载失败。
+- 扩展 `extensions/context-meter.ts`:**注册一个只读工具 `context_usage`,不挂任何事件钩子、不向消息数组注入任何内容**(仅随工具声明带一条静态 guideline,收进 system prompt 的 rules 段)——单一职责是报数,不含任何策略。**不注入消息是有意的**:注入要占用消息数组末位,而 pi 把 prompt cache 的 message 级断点放在「最后一条文本内容」上,常驻读数会夺走断点、令整段历史缓存失配。数值来自 `ctx.getContextUsage()`(与 TUI footer 同源)。**零运行时依赖**——`parameters` 写字面量 + `import type`;若改成 `import { Type } from "typebox"` 取值引用,扩展会因解析不到该包而加载失败。
 - 改动扩展后必须跑它的测试(本包唯一不能靠人工核对的产物):`node --experimental-strip-types devflow/extensions/context-meter.test.mjs`。
 - 评审 subagent:直接用 pi-subagents 内置 `reviewer`,不做本地副本或覆盖,保持上游同步;复审 reduced reasoning tier 在派发时指定。
 - implementer subagent:优先用环境提供的通用 subagent/任务工具,不做本地副本。它**不提交、不改四层文档、不评审自己、不派 subagent、发现契约缺口即停手报告**——这五条是它在流程里的边界。
