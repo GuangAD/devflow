@@ -27,7 +27,9 @@ for f in $(find "$SKILLS" -name SKILL.md | sort); do
   case "$f" in */dev-map/*) continue ;; esac   # dev-map 已废弃，不校验其引用
   dir=$(dirname "$f")
   for ref in $(grep -o 'references/[A-Za-z0-9._-]*\.md' "$f" 2>/dev/null | sort -u); do
-    [ -f "$dir/$ref" ] || note "缺失 $ref（引用于 ${f#$ROOT/}）"
+    # 同技能目录优先；跨技能引用（如 domain-docs 指向 dev 技能的模板）在全库内解析
+    [ -f "$dir/$ref" ] || [ -n "$(find "$SKILLS" -path "*/$ref" -print -quit)" ] \
+      || note "缺失 $ref（引用于 ${f#$ROOT/}）"
   done
 done
 [ "$fail" -eq 0 ] && echo "ok"

@@ -11,12 +11,12 @@
 skills/                    # 技能:工作流逻辑
 ├── dev/                   # 主入口:入口分流 + 五阶段 + 三道门 + 回退协议
 │   └── references/        #   intake(看清/入口/定档,访谈纪律指向 grilling)、brief/slice/tech-spec/task-spec 模板、
-│                          #   自查清单、implementer 派发模板
-├── dev-doc/               # 知识沉淀(CONTEXT.md + ADR)
+│                          #   自查清单、implementer 派发模板、判断台账(decisions)模板
+├── dev-doc/               # 知识沉淀(CONTEXT.md + DECISIONS.md + ADR)
 ├── dev-resume/            # 中断恢复协议(含 T1 前预检状态判定)
 ├── dev-review/            # 代码库巡检
 ├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
-├── domain-docs/           # 纪律:词汇表 + ADR 维护
+├── domain-docs/           # 纪律:词汇表 + 判断台账 + ADR 维护
 ├── tdd/                   # 纪律:红绿循环 + waiver allowlist
 ├── code-review/           # 纪律:subagent 评审 + 分级处置
 │   └── references/        #   评审派发模板 + 复审专用模板
@@ -144,15 +144,17 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 ## 维护说明
 
 - 修改技能后无需重启 pi 以外的操作;技能在会话启动时重新扫描。**改完跑一轮静态检查**:`bash devflow/tests/skill-check.sh`。
-- 流程契约 = `dev/SKILL.md` + `dev/references/`(intake、四份模板、自查清单、implementer 派发)+ `code-review/references/`(评审派发 + 复审模板)+ `extensions/context-meter.ts`。改动需同步更新 `../analysis/16-workflow-redesign.md`。
+- 流程契约 = `dev/SKILL.md` + `dev/references/`(intake、五份模板、自查清单、implementer 派发)+ `code-review/references/`(评审派发 + 复审模板)+ `extensions/context-meter.ts`。改动需同步更新 `../analysis/16-workflow-redesign.md`。
 - `dev/SKILL.md` 保持在 **20,000 字节以内**——上游实证:compaction 后每个技能只重挂前 20,000 字符,超出即永久丢失。超了就把细节搬进 `references/`,SKILL.md 只留骨架。`skill-check.sh` 会拦。
 - 扩展 `extensions/context-meter.ts`:**注册一个只读工具 `context_usage`,不挂任何事件钩子、不向消息数组注入任何内容**(仅随工具声明带一条静态 guideline,收进 system prompt 的 rules 段)——单一职责是报数,不含任何策略。**不注入消息是有意的**:注入要占用消息数组末位,而 pi 把 prompt cache 的 message 级断点放在「最后一条文本内容」上,常驻读数会夺走断点、令整段历史缓存失配。数值来自 `ctx.getContextUsage()`(与 TUI footer 同源)。**零运行时依赖**——`parameters` 写字面量 + `import type`;若改成 `import { Type } from "typebox"` 取值引用,扩展会因解析不到该包而加载失败。
 - 改动扩展后必须跑它的测试(本包唯一不能靠人工核对的产物):`node --experimental-strip-types devflow/extensions/context-meter.test.mjs`。
 - 评审 subagent:直接用 pi-subagents 内置 `reviewer`,不做本地副本或覆盖,保持上游同步;复审 reduced reasoning tier 在派发时指定。
 - implementer subagent:优先用环境提供的通用 subagent/任务工具,不做本地副本。它**不提交、不改四层文档、不评审自己、不派 subagent、发现契约缺口即停手报告**——这五条是它在流程里的边界。
-- 本仓库**自身**的领域词汇表在根目录 `CONTEXT.md`,架构决策记录在 `docs/adr/`。两者都由 `/dev-doc` 维护。改动流程契约后,若术语含义或决策理由有变,同步这两处(术语就地改,ADR 只可被取代、不可被修改)。
+- 本仓库**自身**的领域词汇表在根目录 `CONTEXT.md`,架构决策记录在 `docs/adr/`。两者都由 `/dev-doc` 维护。改动流程契约后,若术语含义或决策理由有变,同步这两处(术语就地改,ADR 只可被取代、不可被修改)。**本仓库不建 `DECISIONS.md`**:devflow 自身的判断变更就是规范演进,记在 `ROADMAP.md` 与 `../analysis/16`;台账服务于跑 dev 流程的被管理项目。
 - **受控复述点清单**(同一规则在多处复述是刻意的——每个角色在自己的读物里都需要它;**改其一必查其余**):
   - mutation check:`tdd/SKILL.md`(归属与做法,源头)/ `code-review/SKILL.md`(闭合条件)/ `dev/references/implementer-prompt.md`(执行纪律第 8 条 + 速查表)/ `dev/references/slice.md`(开发记录格式)/ `../analysis/16` 第七节
   - TDD waiver:`tdd/SKILL.md`(allowlist 与留痕,源头)/ `dev/references/slice.md`(预登记)/ `dev/SKILL.md`(阶段 4 步 2 与步 7)/ `../analysis/16` 第七节
   - 上下文预算与 45% 阈值:`dev/SKILL.md`「上下文预算」节(唯一真值)/ `../analysis/16`;`extensions/context-meter.ts` 只报数、不含判据(测试有结构性断言看守)。`../docs/adr/0003` 也引用了该数值但 ADR 不可修改——阈值若变更,用新 ADR 取代而非就地改
   - 门 2 的存在与呈报形态:`dev/SKILL.md` 阶段 3 / `dev/references/self-check.md`「门 2 呈报」/ ADR-0005
+  - 判断台账的格式与状态机:`dev/references/decisions-template.md`(唯一真值)/ `dev/SKILL.md`(门 1 后登记、回退协议、收尾对账)/ `dev/references/self-check.md` 8.1 / `dev-resume`(第二步读有效区)/ `domain-docs` + `dev-doc`(沉淀触发与不可改写)
+  - 排版阈值(叙述段 ≤3 句、单句 ≤60 字、步骤 ≥3 走列表):`dev/references/self-check.md` 第 9 条(唯一真值)/ `brief`、`tech-spec`、`task-spec` 三份模板各留一行指针,不复述阈值
