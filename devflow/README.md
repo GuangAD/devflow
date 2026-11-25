@@ -167,7 +167,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 - **受控复述点清单**(同一规则在多处复述是刻意的——每个角色在自己的读物里都需要它;**改其一必查其余**):
   - mutation check:`tdd/SKILL.md`(归属与做法,源头)/ `code-review/SKILL.md`(闭合条件)/ `dev/references/implementer-prompt.md`(执行纪律第 8 条 + 速查表)/ `dev/references/slice.md`(开发记录格式)/ `../analysis/16` 第七节
   - TDD waiver:`tdd/SKILL.md`(allowlist 与留痕,源头)/ `dev/references/slice.md`(预登记)/ `dev/SKILL.md`(阶段 4 步 2 与步 6)/ `../analysis/16` 第七节
-  - 上下文预算与 45% 阈值:`dev/SKILL.md`「上下文预算」节(唯一真值)/ `../analysis/16`;`extensions/context-meter.ts` 只报数、不含判据(测试有结构性断言看守)。`../docs/adr/0003` 也引用了该数值但 ADR 不可修改——阈值若变更,用新 ADR 取代而非就地改
+  - 上下文预算与 45% 阈值(以及阶段 4 开工读数 30%):`dev/SKILL.md`「上下文预算」节与阶段 4 开头(唯一真值)/ `../analysis/16`;`extensions/context-meter.ts` 只报数、不含判据(测试有结构性断言看守)。`../docs/adr/0003` 也引用了该数值但 ADR 不可修改——阈值若变更,用新 ADR 取代而非就地改
   - 门 2 的存在与呈报形态:`dev/SKILL.md` 阶段 3 / `dev/references/self-check.md`「门 2 呈报」/ ADR-0005
   - 判断台账的格式与状态机:`dev/references/decisions-template.md`(唯一真值)/ `dev/SKILL.md`(门 1 后登记、回退协议、收尾对账)/ `dev/references/self-check.md` 8.1 / `dev-resume`(第二步读有效区)/ `domain-docs` + `dev-doc`(沉淀触发与不可改写)
   - 排版阈值(叙述段 ≤3 句、单句 ≤60 字、步骤 ≥3 走列表):`dev/references/self-check.md` 第 9 条(唯一真值)/ `brief`、`tech-spec`、`task-spec` 三份模板各留一行指针,不复述阈值
