@@ -1,6 +1,6 @@
 # devflow — pi 个人开发工作流包
 
-一个 `/dev` 命令走天下的个人 AI 编码工作流：接到需求先看再判，能直接做就直接做；要设计就写需求文档（门 1），切完片、写完技术规格与全部任务契约再停一次（门 2），然后逐任务自治开发，最后门 3 验收。三道门守方向、路径、结果，门之间 agent 挂机自治。内置 TDD 红绿循环、subagent 独立评审、证据先于声称等纪律技能。
+一个 `/dev` 命令走天下的个人 AI 编码工作流：接到需求先看再判，能直接做就直接做；要设计就写需求文档（门 1），切完片、写完技术规格与全部任务契约再停一次（门 2），然后逐任务自治开发，最后门 3 验收。三道门守方向、路径、结果，门之间 agent 挂机自治。内置 TDD 红绿循环、按风险分级的独立评审、证据先于声称等纪律技能。
 
 由 [mattpocock/skills](https://github.com/mattpocock/skills) 与 [obra/superpowers](https://github.com/obra/superpowers) 蒸馏而成，设计定稿见 [analysis/16-workflow-redesign.md](analysis/16-workflow-redesign.md)（2026-11-01 重设计，取代 `analysis/03`）。
 
@@ -25,7 +25,7 @@ pi -e git:github.com/GuangAD/devflow
 ## 提供的资源
 
 - **命令**：dev（主入口）/ dev-onboard（项目入职）/ dev-backlog（待办盘点）/ dev-doc（知识沉淀）/ dev-resume（断点续做）/ dev-review（代码库巡检）
-- **纪律技能**：grilling（整轮访谈原语）、tdd（红绿循环 + waiver 留痕 + mutation check）、code-review（subagent 评审 + 分级处置）、debugging（根因先行）、verification（证据先于声称）、domain-docs（词汇表 + ADR）等 11 项
+- **纪律技能**：grilling（整轮访谈原语）、tdd（红绿循环 + waiver 留痕 + mutation check）、code-review（评审分级 + 分级处置）、debugging（根因先行）、verification（证据先于声称）、domain-docs（词汇表 + ADR + 判断台账）等 11 项
 - **模板与派发**：`dev/references/` 下 intake、brief、slice、tech-spec、task-spec 五份模板，十条自查清单，以及 implementer 派发模板
 - **扩展**：context-meter（注册只读工具 `context_usage` 读上下文占比；只报数、不判阈值，阈值写在 dev 技能里；不注入任何消息，零运行时依赖）
 - **自检**：`devflow/tests/skill-check.sh`（技能文档字节上限、引用完整、无旧概念残留）

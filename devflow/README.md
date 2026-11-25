@@ -20,7 +20,7 @@ skills/                    # 技能:工作流逻辑
 ├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
 ├── domain-docs/           # 纪律:词汇表 + 判断台账 + ADR 维护
 ├── tdd/                   # 纪律:红绿循环 + waiver allowlist
-├── code-review/           # 纪律:subagent 评审 + 分级处置
+├── code-review/           # 纪律:评审分级 + 分级处置
 │   └── references/        #   评审派发模板 + 复审专用模板
 ├── debugging/             # 纪律:根因先行诊断
 └── verification/          # 纪律:证据先于声称
@@ -82,7 +82,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 2. **门 2**：确认 `plan.md`（任务与依赖）+ `spec.md`（整体实现/按需流程图/数据结构/模块路径与职责/覆盖标准/接缝清单）+ 全部任务契约（实现方式/按需流程图/文件落点/数据结构/步骤/用例）。这些文件此时已写好在磁盘上，这段呈报只是索引
 3. **门 3**:验收最终报告——逐项验收、评审记录、waiver 清单、提交列表、遗留事项、**我替你做过的判断**
 
-门之间的开发阶段 agent 自治:T1 开始前先做任务间接口与测试命令预检并记入 plan;之后按依赖拓扑序**串行**逐任务——实现派给 subagent(优先)或会话内做(fallback)→ 自己重跑验证 → subagent 评审 → 提交 → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
+门之间的开发阶段 agent 自治:T1 开始前先做任务间接口与测试命令预检并记入 plan;之后按依赖拓扑序**串行**逐任务——每任务先选实现形态(L1 会话内 / L2 单任务派发 / L3 常驻 implementer,判据是剩余任务数 × 剩余上下文预算)→ 自己核对验证 → 按**评审分级**决定派 `reviewer` 还是冷却自审 → 提交与记账同一个 commit → 勾选进度。任务边界默认不停顿,只有 Critical 问题、implementer 停手、或上下文真的挤到需要换会话时才会叫你。
 
 **门必须真的停下**:2026-11-01 实测,只发通知不停顿,几十个工具调用会把通知淹没,agent 一路跑到门 3。
 
@@ -109,7 +109,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 |---|---|---|
 | 触发方式 | 命令启动,无消息注入;扩展只注册一个按需调用的只读工具(声明带一条静态 guideline 进 system prompt) | 个人使用,拒绝过程感重的自动接管;状态落盘使常驻注入不再必要。**不注入也顺带保住了 prompt cache 的前缀** |
 | 入口分流 | 看清后按序判断:修 bug / 直接做 / 大需求 / 拆包 / brief;文档只有一页纸与完整两档 | 分类发生在理解之前等于猜。「直接做」是入口结果,不是文档档位;八节、三道门与开发纪律不随档位缩放 |
-| 执行引擎 | 会话内控制 + subagent 实现 + subagent 评审 | 评审独立性必须保住;实现派给 subagent 是为隔离工作记忆。无 subagent 时退回会话内实现 + 按需切换 |
+| 执行引擎 | 会话内控制 + 三档实现形态(L1 会话内 / L2 单任务派发 / L3 常驻 implementer)+ 按风险分级的评审 | 派发是为了保住 controller 上下文(唯一会撞压缩墙的资源),不是为省总 token,所以判据是剩余任务数 × 剩余预算而非任务大小。评审独立性只在动接缝/并发/数据结构/跨模块接口时不可让渡,其余走冷却自审并标注「非独立」 |
 | TDD | 默认制 + waiver allowlist 留痕 | 亲眼看红是核心;纯配置/文案 waiver 防磨人 |
 | 门密度 | 三道:门 1 批需求、门 2 批切片与契约、门 3 验收 | 人在决策处出现,在执行处消失。门 2 曾被砍掉一次,2026-11-01 实测证明切片与契约是判断而非机械分解,已恢复 |
 | 文档分层 | brief(冻结)/ plan(活)/ spec(活)/ 任务契约(一任务一份) | 按**批准层级**划分而非主题:谁批、批后谁能改,机械可判 |
@@ -143,8 +143,9 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 | 控制器 | controller | 指 dev 主流程所在的会话 |
 | 实现者 | implementer | 承接实现任务的 subagent |
 | 评审者 | reviewer | 承接评审的 subagent(pi-subagents 内置 `reviewer`) |
-| 自审 | self-review | 无 subagent 时的降级评审,须标「非独立」 |
-| 台账 | ledger | 状态记录,此处特指 plan.md 的开发记录 |
+| 自审 | self-review | 冷却后重读自己 diff 的评审,须标「非独立」;评审分级允许时使用 |
+| 台账 | ledger | 状态记录:plan.md 的开发记录(施工台账)与根目录 `DECISIONS.md`(判断台账) |
+| 实现形态 | execution tier | L1 会话内 / L2 单任务派发 / L3 常驻 implementer |
 | 豁免 | waiver | TDD 豁免,须留痕 |
 | 降级 | fallback | 无 subagent 时的替代路径 |
 | 钉住用例 | pinned case | 钉住某个行为、防止复发的用例 |
@@ -165,8 +166,9 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 - 本仓库**自身**的领域词汇表在根目录 `CONTEXT.md`,架构决策记录在 `docs/adr/`。两者都由 `/dev-doc` 维护。改动流程契约后,若术语含义或决策理由有变,同步这两处(术语就地改,ADR 只可被取代、不可被修改)。**本仓库不建 `DECISIONS.md`**:devflow 自身的判断变更就是规范演进,记在 `ROADMAP.md` 与 `../analysis/16`;台账服务于跑 dev 流程的被管理项目。
 - **受控复述点清单**(同一规则在多处复述是刻意的——每个角色在自己的读物里都需要它;**改其一必查其余**):
   - mutation check:`tdd/SKILL.md`(归属与做法,源头)/ `code-review/SKILL.md`(闭合条件)/ `dev/references/implementer-prompt.md`(执行纪律第 8 条 + 速查表)/ `dev/references/slice.md`(开发记录格式)/ `../analysis/16` 第七节
-  - TDD waiver:`tdd/SKILL.md`(allowlist 与留痕,源头)/ `dev/references/slice.md`(预登记)/ `dev/SKILL.md`(阶段 4 步 2 与步 7)/ `../analysis/16` 第七节
+  - TDD waiver:`tdd/SKILL.md`(allowlist 与留痕,源头)/ `dev/references/slice.md`(预登记)/ `dev/SKILL.md`(阶段 4 步 2 与步 6)/ `../analysis/16` 第七节
   - 上下文预算与 45% 阈值:`dev/SKILL.md`「上下文预算」节(唯一真值)/ `../analysis/16`;`extensions/context-meter.ts` 只报数、不含判据(测试有结构性断言看守)。`../docs/adr/0003` 也引用了该数值但 ADR 不可修改——阈值若变更,用新 ADR 取代而非就地改
   - 门 2 的存在与呈报形态:`dev/SKILL.md` 阶段 3 / `dev/references/self-check.md`「门 2 呈报」/ ADR-0005
   - 判断台账的格式与状态机:`dev/references/decisions-template.md`(唯一真值)/ `dev/SKILL.md`(门 1 后登记、回退协议、收尾对账)/ `dev/references/self-check.md` 8.1 / `dev-resume`(第二步读有效区)/ `domain-docs` + `dev-doc`(沉淀触发与不可改写)
   - 排版阈值(叙述段 ≤3 句、单句 ≤60 字、步骤 ≥3 走列表):`dev/references/self-check.md` 第 9 条(唯一真值)/ `brief`、`tech-spec`、`task-spec` 三份模板各留一行指针,不复述阈值
+  - 实现形态 L1/L2/L3:`dev/SKILL.md` 阶段 4 步 2(唯一真值,含三档判据)/ `dev/references/implementer-prompt.md`(指名式简报与 L3 纪律)/ `dev/references/slice.md`(开发记录「形态」字段)/ `code-review/SKILL.md`(评审分级与 resume 复审)
