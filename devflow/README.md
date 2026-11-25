@@ -13,6 +13,7 @@ skills/                    # 技能:工作流逻辑
 │   └── references/        #   intake(看清/入口/定档,访谈纪律指向 grilling)、brief/slice/tech-spec/task-spec 模板、
 │                          #   自查清单、implementer 派发模板、判断台账(decisions)模板
 ├── dev-doc/               # 知识沉淀(CONTEXT.md + DECISIONS.md + ADR)
+├── dev-onboard/           # 项目入职:分层读懂项目,回述底图 + 抽问
 ├── dev-resume/            # 中断恢复协议(含 T1 前预检状态判定)
 ├── dev-review/            # 代码库巡检
 ├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
@@ -26,6 +27,7 @@ skills/                    # 技能:工作流逻辑
 prompts/                   # 命令:固定入口
 ├── dev.md                  # → /dev <任务描述>
 ├── dev-doc.md              # → /dev-doc [术语/决策]
+├── dev-onboard.md          # → /dev-onboard [关注方向]
 ├── dev-resume.md           # → /dev-resume [计划]
 └── dev-review.md           # → /dev-review [范围]
 
@@ -50,7 +52,7 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 
 **本地开发本包时**:`pi install -l <本仓库路径>`——本地包直接从解析路径加载,不复制,改完即生效(新会话)。
 
-重启 pi 后,输入 `/` 应能看到 `dev`、`dev-doc`、`dev-resume`、`dev-review` 四个命令。
+重启 pi 后,输入 `/` 应能看到 `dev`、`dev-onboard`、`dev-doc`、`dev-resume`、`dev-review` 五个命令。
 
 ## 使用
 
