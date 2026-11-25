@@ -1,21 +1,23 @@
 # ROADMAP
 
 ## 当前阶段
-**2026-11-25 dev-onboard 项目入职命令**（文档已改,未发版）。上一主题:**2026-11-24 阶段 4 执行形态与评审分级**（工作区已改,未提交）。更早见 `../analysis/16-workflow-redesign.md` 第十二至十五节。
+**2026-11-25 dev-backlog 待办盘点命令**（文档已改,未发版）。上一主题:**2026-11-25 dev-onboard 项目入职命令**（已提交 `e8c8d8f`）。更早见 `../analysis/16-workflow-redesign.md` 第十二至十五节。
 
-起因：新 agent 手里没有需求时无从下手——`/dev` 要有需求、`/dev-resume` 要有未完成计划、`/dev-review` 是找问题，于是要么读一堆无关文件，要么直接动手写。缺一份「第一次进入项目」的确定读法与验收方式。
+起因：`/dev-onboard` 落地后暴露一个缺口——用户想让它捎带「统计遗留未作的项」，而 onboard 的产物是固定的八块认知呈报，里面没有放清单的位置。顺着查发现 devflow 本就没有跨特性待办汇总：`/dev-resume` 只管单个计划、`ROADMAP` 的「下一步」只有项目级粗粒度、各计划的遗留项各自埋在 `plan.md` 里。
 
 核心变化：
 
-- **新增 `/dev-onboard` 命令 + `dev-onboard` 技能**：四层阅读（L0 底图 / L1 判断 / L2 历史 / L3 代码鸟瞰，L4 归 intake 的深挖）+ 整轮上下文预算 20% + 停止条件。产物只有认知：不写代码、不产出四层文档、不新建项目地图类文档
-- **八块固定呈报 + 抽问**：项目是什么 / 怎么跑怎么测 / 当前进度与未完成计划 / 六份文档各管什么 / 当前有效判断 3-5 条 / 最近三个特性与为什么 / **我还没搞清的** / 建议下一步；呈报后停下等用户抽问三题，答不上来回去补读
-- **验收判据可数**：命令原文逐字、进度与 `docs/plans/` 实况一致、有效判断带 `J` 编号、理由能追到 `brief` 节号或 ADR、第 7 块非空且具体
-- **写入边界**：只提议不改——缺 `AGENTS.md` 时报缺陷不补写；值得留存的规矩交用户确认后由用户或 `/dev-doc` 写；`ROADMAP` / `CONTEXT` / `DECISIONS` 一次不动
-- **与既有命令分流**：先扫 `docs/plans/*/plan.md` 有无未勾选任务，有则问「接着做还是只建底图」；`intake.md` 只留一行指针指向本技能的 L0 层，不复述清单
+- **新增 `/dev-backlog` 命令 + `dev-backlog` 技能**：只读盘点，扫七类来源（`plan.md` 未勾选任务与遗留项、`brief` 第 6 节未定项、开发记录的挂起 Minor/waiver/结论、`brief` 7.1 未验证验收、`DECISIONS` 的废弃与冲突条目、`ROADMAP` 下一步与 `issues`/`TODO`）
+- **准入三条**：有承接位置、能写出后果、用 `git log` 核实过确实还没做——第三条抓的是「已提交未勾选」这类**记账缺口**，单列一类，不混进未完成
+- **六类分级 A~F**：未验证 → 阻塞 → 未完成 → 欠账 → 记账缺口 → 项目级，排序依据是「不做哪项会让已交付的东西站不住」
+- **覆盖声明必写**：来源不存在也要写，且说明缺它意味着什么；不许静默跳过（缺 `docs/plans/` 本身就是结论）
+- **只读边界**：不改 `plan.md`、不清 `issues`、不动 `DECISIONS`、不删 `TODO`；清账转 `/dev`（新做）或 `/dev-resume`（接着做）
+- **顺带补 onboard 的参数语义**：关注方向只影响取景与 L4 深挖、不改变八块呈报；动作请求转 `/dev`；盘点类转 `/dev-backlog`
 
-下一步：v4.2.0 发版评估（11-23 至 11-25 多轮是否合并发版）；在 `agent-sessions` 这类有完整六份文档的真实项目实跑 onboard，判断标准是用户看完回述能否指出一处理解错误。
+下一步：v4.2.0 发版评估（11-23 至 11-25 多轮是否合并发版）；在 `agent-sessions` 实跑 `/dev-onboard` 与 `/dev-backlog` 各一次，判断标准分别是「回述能否被指出一处错」与「清单数字是否与文件实况自洽」。
 ## 已完成
 
+- 2026-11-25 02:28 新增 dev-backlog 待办盘点：新建 `prompts/dev-backlog.md` 与 `skills/dev-backlog/SKILL.md`(七类来源、准入三条、A~F 分级、覆盖声明、只读边界、25% 预算)；`dev-onboard` 补「传进来的参数怎么处理」(关注方向只改取景、动作请求转 `/dev`、盘点类转 `/dev-backlog`)与边界表一行；两份 README 结构树、命令表与命令数(五个→六个)同步。验证:`devflow/tests/skill-check.sh` PASS、`git diff --check` 通过、SKILL.md 代码围栏成对;未运行测试(文档改动)。
 - 2026-11-25 02:02 新增 dev-onboard 项目入职：新建 `prompts/dev-onboard.md`(命令入口,可选关注方向)与 `skills/dev-onboard/SKILL.md`(四层阅读清单 + 20% 预算 + 停止条件 + 八块呈报 + 验收判据与抽问 + 写入边界,5590 字节)；`intake.md` 加首次进入项目的 L0 指针(不复述清单)；两份 README 的结构树、命令表与命令数(四个→五个)同步。验证:`devflow/tests/skill-check.sh` PASS、`git diff --check` 通过、SKILL.md 代码围栏成对;未运行测试(文档改动)。
 - 2026-11-23 09:47 spec 与任务契约可读性：`tech-spec` 的「整体实现」与 `task-spec` 的「实现方式」由「一段叙述」改为固定四块/四行骨架并各带正例；`self-check` 第 9 条升级为排版唯一真值(新增叙述段 ≤3 句、单句 ≤60 字、事实链 >2 步改列表、三处抽检对象)；`task-spec` 伪代码注释改「用途/怎么用/出错时」三行问句 + 注释须写成句子 + 调用形状粒度定义 + `loadStore`/`saveStoreAtomic`/`rank` 三例正例；`brief-template` 排版纪律压为一行指针加两条 brief 特有规则(去重);README 受控复述点清单登记排版阈值;`self-check` 门 2 呈报加「只有时间看三处」指路(数据结构节 / 覆盖标准档位 / 任一任务的实现方式)。验证:`devflow/tests/skill-check.sh` PASS、`git diff --check` 通过、三份模板代码围栏成对;未运行测试(文档改动)。
 - 2026-11-23 09:31 新增判断台账(DECISIONS.md):新建 `dev/references/decisions-template.md`(条目格式、状态机、收录判据、与另几份文档的边界表、四个写入时机)；`dev/SKILL.md` 门 1 后登记与同步提交、回退协议加取代登记义务、收尾对账纳入台账、最终报告六块改七块；`slice.md` 的「结论」字段加台账去向、plan 模板加指针；`self-check` 新增 8.1 台账对账；`dev-resume` 第二步读有效条目；`domain-docs` 长期记忆两层改三层并新增台账节、`dev-doc` 沉淀对象加「跨特性判断」；`CONTEXT.md` 新增「判断台账」词条；devflow README 结构树、流程契约模板数、受控复述点清单同步。另将 `tests/skill-check.sh` 的 references 校验改为全库解析(首例为 domain-docs 跨技能指向 dev 的台账模板),self-check 门 1 呈报的「本次沉淀」加入台账条目。验证:`devflow/tests/skill-check.sh` PASS、`git diff --check` 通过;未运行测试(文档改动)。

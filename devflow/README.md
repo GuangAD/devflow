@@ -14,6 +14,7 @@ skills/                    # 技能:工作流逻辑
 │                          #   自查清单、implementer 派发模板、判断台账(decisions)模板
 ├── dev-doc/               # 知识沉淀(CONTEXT.md + DECISIONS.md + ADR)
 ├── dev-onboard/           # 项目入职:分层读懂项目,回述底图 + 抽问
+├── dev-backlog/           # 待办盘点:七类来源汇总,只读,带来源清单
 ├── dev-resume/            # 中断恢复协议(含 T1 前预检状态判定)
 ├── dev-review/            # 代码库巡检
 ├── grilling/              # 纪律:访谈唯一真值(整轮/frontier/每轮短回述)
@@ -28,6 +29,7 @@ prompts/                   # 命令:固定入口
 ├── dev.md                  # → /dev <任务描述>
 ├── dev-doc.md              # → /dev-doc [术语/决策]
 ├── dev-onboard.md          # → /dev-onboard [关注方向]
+├── dev-backlog.md          # → /dev-backlog [时间窗或特性名]
 ├── dev-resume.md           # → /dev-resume [计划]
 └── dev-review.md           # → /dev-review [范围]
 
@@ -52,9 +54,17 @@ pi -e git:github.com/GuangAD/devflow              # 试用不安装
 
 **本地开发本包时**:`pi install -l <本仓库路径>`——本地包直接从解析路径加载,不复制,改完即生效(新会话)。
 
-重启 pi 后,输入 `/` 应能看到 `dev`、`dev-onboard`、`dev-doc`、`dev-resume`、`dev-review` 五个命令。
+重启 pi 后,输入 `/` 应能看到 `dev`、`dev-onboard`、`dev-backlog`、`dev-doc`、`dev-resume`、`dev-review` 六个命令。
 
 ## 使用
+
+### 第一次进入项目、定期盘账
+
+```
+/dev-onboard                    ← 还没需求、要读懂这个项目:四层阅读→八块回述→抽问验收
+/dev-backlog                    ← 盘点遗留与未完成项:七类来源,只读,带来源路径
+/dev-backlog 侧栏              ← 只盘某个特征/时间窗
+```
 
 ### 日常开发
 
